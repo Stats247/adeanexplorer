@@ -1,72 +1,76 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-white">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andean Explorer - Soccer Intelligence</title>
+    <title>Andean Explorer Soccer Intelligence</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for icons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- PapaParse for CSV parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                    },
-                    colors: {
-                        andean: {
-                            green: '#10B981',
-                            blue: '#3B82F6',
-                            naviblue: '#1E3A8A',
-                            orange: '#F97316',
-                            teal: '#14B8A6',
-                            purple: '#8B5CF6',
-                            dark: '#0F172A',
-                            card: '#FFFFFF',
-                            border: '#CBD5E1'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Poppins', sans-serif; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(3deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
         .spinner {
-            border: 3px solid rgba(20, 184, 166, 0.2);
+            border: 3px solid rgba(13, 148, 136, 0.1);
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            border-top: 3px solid #14B8A6;
-            width: 32px;
-            height: 32px;
+            border-left-color: #0d9488;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes floatLogo {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-4px) rotate(3deg); }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        .animated-logo { animation: floatLogo 3s ease-in-out infinite; }
     </style>
 </head>
-<body class="bg-white text-slate-800 h-full flex flex-col selection:bg-teal-500 selection:text-white">
+<body class="min-h-screen flex flex-col bg-white">
 
-    <!-- Header -->
+    <!-- Header Navigation -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo & Brand -->
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-andean-teal via-andean-blue to-andean-purple flex items-center justify-center shadow-md animated-logo text-white">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-600 via-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md animate-float">
                     <i class="fa-solid fa-compass text-2xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-black tracking-wider bg-gradient-to-r from-teal-600 via-sky-600 to-indigo-600 bg-clip-text text-transparent">ANDEAN EXPLORER</h1>
-                    <p class="text-xs text-slate-500 font-medium">Soccer Intelligence & Analytics System</p>
+                    <h1 class="text-xl font-extrabold tracking-tight text-slate-900 flex items-center">
+                        Andean Explorer
+                        <span class="ml-2 px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-teal-50 text-teal-700 border border-teal-200 rounded-full">AI Intel</span>
+                    </h1>
+                    <p class="text-xs font-medium text-slate-500">Advanced Soccer Analytics & Predictive Models</p>
                 </div>
             </div>
+
             <!-- Tab Navigation -->
             <div class="flex space-x-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
                 <button onclick="switchTab('matches')" id="btnTabMatches" class="px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 bg-teal-600 text-white shadow-sm">
@@ -74,6 +78,9 @@
                 </button>
                 <button onclick="switchTab('analytics')" id="btnTabAnalytics" class="px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900">
                     <i class="fa-solid fa-chart-pie mr-2"></i>Analytics
+                </button>
+                <button onclick="switchTab('roi')" id="btnTabRoi" class="px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-coins mr-2"></i>ROI & Profit
                 </button>
             </div>
         </div>
@@ -97,44 +104,44 @@
         </div>
 
         <!-- Matches Tab Content -->
-        <div id="matchesTab" class="space-y-6 hidden">
-            
-            <!-- Top Summary Cards (Total Matches, Total Won, Win Rate) -->
+        <div id="matchesTab" class="space-y-6">
+
+            <!-- KPI Top Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex items-center space-x-4">
                     <div class="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-2xl font-bold border border-teal-100">
-                        <i class="fa-solid fa-futbol"></i>
+                        <i class="fa-solid fa-layer-group"></i>
                     </div>
                     <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Filtered Matches</p>
-                        <h3 id="cardTotalMatches" class="text-2xl font-black text-slate-900 mt-1">0</h3>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Matches</p>
+                        <h3 id="statTotalMatches" class="text-2xl font-black text-slate-900 mt-1">0</h3>
                     </div>
                 </div>
                 <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex items-center space-x-4">
                     <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold border border-emerald-100">
-                        <i class="fa-solid fa-check-to-slot"></i>
+                        <i class="fa-solid fa-trophy"></i>
                     </div>
                     <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Won / Correct</p>
-                        <h3 id="cardTotalWon" class="text-2xl font-black text-slate-900 mt-1">0</h3>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Won</p>
+                        <h3 id="statTotalWon" class="text-2xl font-black text-slate-900 mt-1">0</h3>
                     </div>
                 </div>
                 <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex items-center space-x-4">
                     <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl font-bold border border-blue-100">
-                        <i class="fa-solid fa-chart-line"></i>
+                        <i class="fa-solid fa-bullseye"></i>
                     </div>
                     <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Overall Win Rate</p>
-                        <h3 id="cardWinRate" class="text-2xl font-black text-slate-900 mt-1">0%</h3>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Win Rate</p>
+                        <h3 id="statWinRate" class="text-2xl font-black text-slate-900 mt-1">0%</h3>
                     </div>
                 </div>
             </div>
 
-            <!-- Filter Panel -->
+            <!-- Filters Section -->
             <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-base font-bold text-teal-700 flex items-center">
-                        <i class="fa-solid fa-filter mr-2"></i> Filter Matches
+                        <i class="fa-solid fa-filter mr-2"></i> Match Intelligence Filters
                     </h2>
                     <button onclick="resetFilters()" class="text-xs text-slate-500 hover:text-teal-700 transition font-semibold">
                         <i class="fa-solid fa-rotate-left mr-1"></i> Reset Filters
@@ -160,55 +167,58 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Match Date Picker</label>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Match Date</label>
                         <input type="date" id="filterDate" onchange="applyFilters()" class="w-full bg-white border border-slate-300 text-slate-800 text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:border-teal-500 shadow-sm">
                     </div>
                 </div>
             </div>
 
-            <!-- Matches Table Card -->
+            <!-- Matches Table Section -->
             <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                    <span id="matchCountIndicator" class="text-sm font-semibold text-slate-600">Showing matches</span>
-                    <div class="flex items-center space-x-4 text-xs font-medium text-slate-600">
-                        <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-emerald-100 border border-emerald-500 mr-1.5"></span> Correct Tip (Won)</span>
-                        <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-rose-100 border border-rose-500 mr-1.5"></span> Incorrect Tip (Lost)</span>
-                    </div>
+                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+                    <h3 class="font-bold text-slate-800 text-base flex items-center">
+                        <i class="fa-solid fa-table-list mr-2 text-teal-600"></i> Match Schedule & Predictions
+                    </h3>
+                    <span id="matchCountLabel" class="text-xs font-semibold text-slate-500 bg-slate-200/60 px-3 py-1 rounded-lg">Showing 0 matches</span>
                 </div>
-
+                
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse border border-slate-300">
+                    <table class="w-full text-left border-collapse border border-slate-200">
                         <thead>
-                            <tr class="bg-slate-100 text-slate-700 uppercase text-xs tracking-wider font-bold">
-                                <th class="py-3 px-3 border border-slate-300">Match Date</th>
-                                <th class="py-3 px-3 border border-slate-300">Competition</th>
-                                <th class="py-3 px-3 border border-slate-300">Teams</th>
-                                <th class="py-3 px-3 border border-slate-300 text-center">Odds (H/D/A)</th>
-                                <th class="py-3 px-3 border border-slate-300 text-center">Score Tip</th>
-                                <th class="py-3 px-3 border border-slate-300 text-center">Conf.</th>
-                                <th class="py-3 px-3 border border-slate-300 text-center">Match Result</th>
-                                <th class="py-3 px-3 border border-slate-300 text-center">Action</th>
+                            <tr class="bg-slate-50 text-slate-700 uppercase text-[11px] tracking-wider font-bold">
+                                <th class="py-3 px-4 border border-slate-200">Match Date</th>
+                                <th class="py-3 px-4 border border-slate-200">Competition</th>
+                                <th class="py-3 px-4 border border-slate-200">Home Team</th>
+                                <th class="py-3 px-4 border border-slate-200">Away Team</th>
+                                <th class="py-3 px-4 border border-slate-200 text-center">Home Odds</th>
+                                <th class="py-3 px-4 border border-slate-200 text-center">Draw Odds</th>
+                                <th class="py-3 px-4 border border-slate-200 text-center">Away Odds</th>
+                                <th class="py-3 px-4 border border-slate-200 text-center">Score Tip</th>
+                                <th class="py-3 px-4 border border-slate-200 text-center">Confidence</th>
+                                <th class="py-3 px-4 border border-slate-200 text-center">Match Result</th>
+                                <th class="py-3 px-4 border border-slate-200 text-center">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="matchesTableBody" class="divide-y divide-slate-300 text-sm text-slate-700">
+                        <tbody id="matchesTableBody" class="divide-y divide-slate-200 text-xs">
                             <!-- Populated dynamically -->
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Pagination Controls -->
+                <!-- Pagination Footer -->
                 <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-                    <div id="paginationInfo" class="text-xs text-slate-600 font-semibold">Page 1 of 1</div>
+                    <span id="paginationInfo" class="text-xs font-medium text-slate-600">Page 1 of 1</span>
                     <div class="flex space-x-2">
-                        <button onclick="changePage(-1)" id="prevBtn" class="px-4 py-2 bg-white border border-slate-300 hover:bg-slate-100 disabled:opacity-40 text-slate-700 rounded-xl text-xs font-semibold transition shadow-sm">
+                        <button onclick="changePage(-1)" id="prevPageBtn" class="px-4 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition shadow-sm disabled:opacity-40 disabled:cursor-not-allowed">
                             <i class="fa-solid fa-chevron-left mr-1"></i> Previous
                         </button>
-                        <button onclick="changePage(1)" id="nextBtn" class="px-4 py-2 bg-teal-600 hover:bg-teal-500 disabled:opacity-40 text-white rounded-xl text-xs font-semibold transition shadow-sm">
+                        <button onclick="changePage(1)" id="nextPageBtn" class="px-4 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition shadow-sm disabled:opacity-40 disabled:cursor-not-allowed">
                             Next <i class="fa-solid fa-chevron-right ml-1"></i>
                         </button>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!-- Analytics Tab Content -->
@@ -300,147 +310,242 @@
             </div>
         </div>
 
+        <!-- ROI & Profit Tab Content -->
+        <div id="roiTab" class="space-y-6 hidden">
+            <!-- ROI Filters -->
+            <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-base font-bold text-teal-700 flex items-center">
+                        <i class="fa-solid fa-coins mr-2"></i> Return on Investment (ROI) & Profit Analysis (Standard Stake: 100)
+                    </h2>
+                    <button onclick="resetRoiFilters()" class="text-xs text-slate-500 hover:text-teal-700 transition font-semibold">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset Filters
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Match Type</label>
+                        <select id="roiFilterMatchType" onchange="renderRoiAnalytics()" class="w-full bg-white border border-slate-300 text-slate-800 text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:border-teal-500 shadow-sm">
+                            <option value="">All Match Types</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Competition</label>
+                        <select id="roiFilterCompetition" onchange="renderRoiAnalytics()" class="w-full bg-white border border-slate-300 text-slate-800 text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:border-teal-500 shadow-sm">
+                            <option value="">All Competitions</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Match Date</label>
+                        <input type="date" id="roiFilterDate" onchange="renderRoiAnalytics()" class="w-full bg-white border border-slate-300 text-slate-800 text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:border-teal-500 shadow-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Score Tip</label>
+                        <select id="roiFilterScoreTip" onchange="renderRoiAnalytics()" class="w-full bg-white border border-slate-300 text-slate-800 text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:border-teal-500 shadow-sm">
+                            <option value="">All Score Tips</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Goals Prediction</label>
+                        <select id="roiFilterGoals" onchange="renderRoiAnalytics()" class="w-full bg-white border border-slate-300 text-slate-800 text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:border-teal-500 shadow-sm">
+                            <option value="">All Goals Predictions</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROI Global Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-2xl font-bold border border-teal-100">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Staked</p>
+                        <h3 id="roiTotalStaked" class="text-2xl font-black text-slate-900 mt-1">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl font-bold border border-blue-100">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Returns</p>
+                        <h3 id="roiTotalReturns" class="text-2xl font-black text-slate-900 mt-1">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold border border-emerald-100">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Net Profit/Loss</p>
+                        <h3 id="roiTotalProfit" class="text-2xl font-black text-emerald-700 mt-1">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl font-bold border border-purple-100">
+                        <i class="fa-solid fa-percent"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Overall ROI %</p>
+                        <h3 id="roiPercentage" class="text-2xl font-black text-slate-900 mt-1">0%</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Match Type ROI Tables Container -->
+            <div class="space-y-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center">
+                        <i class="fa-solid fa-table-list mr-2 text-teal-600"></i> Match Type ROI & Profit Breakdown Tables
+                    </h3>
+                    <span class="text-xs text-slate-500 font-medium">Assumes 100 unit stake per evaluated match using Home/Draw/Away odds</span>
+                </div>
+                <div id="roiTablesContainer" class="grid grid-cols-1 gap-6">
+                    <!-- Dynamically injected ROI tables -->
+                </div>
+            </div>
+        </div>
+
     </main>
 
-    <!-- Match Details Modal -->
-    <div id="matchModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm hidden p-4">
-        <div class="bg-white border border-slate-200 rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <!-- Detail Modal Popup -->
+    <div id="matchDetailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm hidden p-4">
+        <div class="bg-white border border-slate-200 w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <!-- Modal Header -->
-            <div class="px-6 py-5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 border border-teal-100 flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center shadow-sm">
                         <i class="fa-solid fa-info text-lg"></i>
                     </div>
                     <div>
-                        <h3 id="modalMatchTitle" class="text-lg font-bold text-slate-900">Match Intelligence Dossier</h3>
-                        <p id="modalMatchSubtitle" class="text-xs text-slate-500 font-medium">Detailed breakdown & advanced metrics</p>
+                        <h3 id="modalMatchTitle" class="text-base font-bold text-slate-900">Match Dossier</h3>
+                        <p id="modalMatchSubtitle" class="text-xs text-slate-500 font-medium">Detailed AI intelligence breakdown</p>
                     </div>
                 </div>
-                <button onclick="closeModal()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
+                <button onclick="closeMatchModal()" class="w-9 h-9 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <!-- Modal Body Content -->
-            <div id="modalBodyContent" class="p-6 overflow-y-auto space-y-6 flex-1 text-slate-700 text-sm">
-                <!-- Dynamically populated detail grid -->
+            <!-- Modal Content Body -->
+            <div id="modalBodyContent" class="p-6 overflow-y-auto space-y-6 flex-1">
+                <!-- Injected via JS -->
             </div>
             <!-- Modal Footer -->
-            <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end">
-                <button onclick="closeModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold transition shadow-sm">Close Dossier</button>
+            <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end space-x-3">
+                <a id="modalMatchUrlLink" href="#" target="_blank" class="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center">
+                    <i class="fa-solid fa-external-link mr-1.5"></i> Open Source Match Page
+                </a>
+                <button onclick="closeMatchModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-semibold transition">
+                    Close
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Application Logic -->
-    <script>
-        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRdBYhj6V1eF7PoiOY2vQkXSTKYzvMlysukYQt05roAsuDEj6KsAXO_0tDOZHRYXhnxJqDLIEMoFoVA/pub?gid=0&single=true&output=csv';
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 font-medium mt-auto">
+        <p>&copy; 2026 Andean Explorer Soccer Intelligence. Powered by Published Google Sheets CSV.</p>
+    </footer>
 
+    <!-- Application Script -->
+    <script>
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdBYhj6V1eF7PoiOY2vQkXSTKYzvMlysukYQt05roAsuDEj6KsAXO_0tDOZHRYXhnxJqDLIEMoFoVA/pub?gid=0&single=true&output=csv";
+        
         let rawMatchData = [];
         let filteredMatchData = [];
         let currentPage = 1;
-        const rowsPerPage = 30;
+        const pageSize = 30;
 
-        // Month name mapping for date parsing
-        const monthsMap = {
-            'january': 0, 'february': 1, 'march': 2, 'april': 3, 'may': 4, 'june': 5,
-            'july': 6, 'august': 7, 'september': 8, 'october': 9, 'november': 10, 'december': 11,
-            'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'jun': 5, 'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
+        window.onload = function() {
+            loadCSVData();
         };
 
-        window.addEventListener('DOMContentLoaded', () => {
-            loadCSVData();
-        });
-
         function loadCSVData() {
-            document.getElementById('loadingState').classList.remove('hidden');
-            document.getElementById('errorState').classList.add('hidden');
-            document.getElementById('matchesTab').classList.add('hidden');
-            document.getElementById('analyticsTab').classList.add('hidden');
+            const loading = document.getElementById('loadingState');
+            const errorBox = document.getElementById('errorState');
+            loading.classList.remove('hidden');
+            errorBox.classList.add('hidden');
 
-            Papa.parse(CSV_URL, {
-                download: true,
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    document.getElementById('loadingState').classList.add('hidden');
-                    if (results.errors && results.errors.length > 0 && results.data.length === 0) {
-                        showError("Error parsing CSV data. Please verify spreadsheet publishing format.");
-                        return;
-                    }
-                    rawMatchData = results.data.map(row => {
-                        let cleanRow = {};
-                        Object.keys(row).forEach(k => {
-                            cleanRow[k.trim()] = row[k] ? row[k].trim() : '';
-                        });
-                        cleanRow.parsedDate = parseCustomDate(cleanRow['Match Date']);
-                        return cleanRow;
-                    });
-
+            fetch(CSV_URL)
+                .then(response => {
+                    if (!response.ok) throw new Error("Network response was not ok");
+                    return response.text();
+                })
+                .then(csvText => {
+                    parseCSV(csvText);
+                    loading.classList.add('hidden');
                     populateFilterDropdowns();
-                    switchTab('matches');
-                },
-                error: function(err) {
-                    document.getElementById('loadingState').classList.add('hidden');
-                    showError("Unable to connect to published Google Sheet CSV. Check network connection or URL.");
-                }
-            });
+                    applyFilters();
+                })
+                .catch(err => {
+                    console.error(err);
+                    loading.classList.add('hidden');
+                    errorBox.classList.remove('hidden');
+                    document.getElementById('errorMessage').innerText = err.message || "Failed to download CSV data.";
+                });
         }
 
-        function showError(msg) {
-            document.getElementById('errorMessage').innerText = msg;
-            document.getElementById('errorState').classList.remove('hidden');
-        }
+        // CSV Parser that handles quoted fields correctly
+        function parseCSV(text) {
+            let lines = text.split("\n");
+            if (lines.length === 0) return;
 
-        // Custom parser for dates like "Wednesday 26th August 2026"
-        function parseCustomDate(dateStr) {
-            if (!dateStr) return null;
-            try {
-                let cleaned = dateStr.replace(/(\d+)(st|nd|rd|th)/gi, '$1');
-                let parts = cleaned.split(/\s+/);
-                if (parts.length >= 4) {
-                    let day = parseInt(parts[1], 10);
-                    let monthName = parts[2].toLowerCase();
-                    let year = parseInt(parts[3], 10);
-                    let month = monthsMap[monthName];
-                    if (!isNaN(day) && month !== undefined && !isNaN(year)) {
-                        let d = new Date(year, month, day);
-                        if (!isNaN(d.getTime())) return d;
-                    }
+            let headers = parseCSVRow(lines[0]);
+            rawMatchData = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                let rowVals = parseCSVRow(lines[i]);
+                if (rowVals.length === 0) continue;
+
+                let rowObj = {};
+                for (let j = 0; j < headers.length; j++) {
+                    rowObj[headers[j]] = rowVals[j] ? rowVals[j].trim() : "";
                 }
-                let fallback = new Date(dateStr);
-                return isNaN(fallback.getTime()) ? null : fallback;
-            } catch (e) {
-                return null;
+
+                // Parse Date for filtering and comparison
+                rowObj.parsedDate = parseCustomDate(rowObj['Match Date']);
+                rawMatchData.push(rowObj);
             }
         }
 
+        function parseCSVRow(rowStr) {
+            let result = [];
+            let inQuote = false;
+            let currentVal = "";
+            for (let i = 0; i < rowStr.length; i++) {
+                let char = rowStr[i];
+                if (char === '"') {
+                    inQuote = !inQuote;
+                } else if (char === ',' && !inQuote) {
+                    result.push(currentVal);
+                    currentVal = "";
+                } else {
+                    currentVal += char;
+                }
+            }
+            result.push(currentVal);
+            return result.map(v => v.replace(/^["']|["']$/g, "").trim());
+        }
+
+        // Custom date parser for strings like "Wednesday 26th August 2026"
+        function parseCustomDate(dateStr) {
+            if (!dateStr) return null;
+            // Remove day name and ordinal suffixes like st, nd, rd, th
+            let cleaned = dateStr.replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s*/i, "");
+            cleaned = cleaned.replace(/(\d+)(st|nd|rd|th)/gi, "$1");
+            let parsed = new Date(cleaned);
+            return isNaN(parsed.getTime()) ? null : parsed;
+        }
+
         function formatDateToISO(dateObj) {
-            if (!dateObj || isNaN(dateObj.getTime())) return '';
+            if (!dateObj) return "";
             let y = dateObj.getFullYear();
             let m = String(dateObj.getMonth() + 1).padStart(2, '0');
             let d = String(dateObj.getDate()).padStart(2, '0');
             return `${y}-${m}-${d}`;
-        }
-
-        function switchTab(tabName) {
-            const matchesTab = document.getElementById('matchesTab');
-            const analyticsTab = document.getElementById('analyticsTab');
-            const btnMatches = document.getElementById('btnTabMatches');
-            const btnAnalytics = document.getElementById('btnTabAnalytics');
-
-            if (tabName === 'matches') {
-                matchesTab.classList.remove('hidden');
-                analyticsTab.classList.add('hidden');
-                btnMatches.className = "px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 bg-teal-600 text-white shadow-sm";
-                btnAnalytics.className = "px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900";
-                applyFilters();
-            } else {
-                matchesTab.classList.add('hidden');
-                analyticsTab.classList.remove('hidden');
-                btnAnalytics.className = "px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 bg-teal-600 text-white shadow-sm";
-                btnMatches.className = "px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900";
-                renderAnalytics();
-            }
         }
 
         function populateFilterDropdowns() {
@@ -464,17 +569,25 @@
             fillSelect('analFilterCompetition', competitions);
             fillSelect('analFilterGoals', goalsPreds);
             fillSelect('analFilterScoreTip', scoreTips);
+
+            fillSelect('roiFilterMatchType', matchTypes);
+            fillSelect('roiFilterCompetition', competitions);
+            fillSelect('roiFilterGoals', goalsPreds);
+            fillSelect('roiFilterScoreTip', scoreTips);
         }
 
         function fillSelect(elementId, setValues) {
             const select = document.getElementById(elementId);
             if (!select) return;
-            let defaultOptText = select.options[0].text;
-            select.innerHTML = `<option value="">${defaultOptText}</option>`;
+            // Keep first option
+            let firstOpt = select.options[0];
+            select.innerHTML = '';
+            select.appendChild(firstOpt);
+
             Array.from(setValues).sort().forEach(val => {
                 let opt = document.createElement('option');
                 opt.value = val;
-                opt.textContent = val;
+                opt.innerText = val;
                 select.appendChild(opt);
             });
         }
@@ -496,269 +609,54 @@
             renderAnalytics();
         }
 
+        function resetRoiFilters() {
+            document.getElementById('roiFilterMatchType').value = '';
+            document.getElementById('roiFilterCompetition').value = '';
+            document.getElementById('roiFilterDate').value = '';
+            document.getElementById('roiFilterScoreTip').value = '';
+            document.getElementById('roiFilterGoals').value = '';
+            renderRoiAnalytics();
+        }
+
+        function switchTab(tabName) {
+            const matchesTab = document.getElementById('matchesTab');
+            const analyticsTab = document.getElementById('analyticsTab');
+            const roiTab = document.getElementById('roiTab');
+            const btnMatches = document.getElementById('btnTabMatches');
+            const btnAnalytics = document.getElementById('btnTabAnalytics');
+            const btnRoi = document.getElementById('btnTabRoi');
+
+            matchesTab.classList.add('hidden');
+            analyticsTab.classList.add('hidden');
+            roiTab.classList.add('hidden');
+            btnMatches.className = "px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900";
+            btnAnalytics.className = "px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900";
+            btnRoi.className = "px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-slate-900";
+
+            if (tabName === 'matches') {
+                matchesTab.classList.remove('hidden');
+                btnMatches.className = "px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 bg-teal-600 text-white shadow-sm";
+                applyFilters();
+            } else if (tabName === 'analytics') {
+                analyticsTab.classList.remove('hidden');
+                btnAnalytics.className = "px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 bg-teal-600 text-white shadow-sm";
+                renderAnalytics();
+            } else if (tabName === 'roi') {
+                roiTab.classList.remove('hidden');
+                btnRoi.className = "px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 bg-teal-600 text-white shadow-sm";
+                renderRoiAnalytics();
+            }
+        }
+
         function applyFilters() {
-            const matchType = document.getElementById('filterMatchType').value;
-            const competition = document.getElementById('filterCompetition').value;
-            const goals = document.getElementById('filterGoals').value;
-            const dateVal = document.getElementById('filterDate').value;
+            const matchTypeF = document.getElementById('filterMatchType').value;
+            const competitionF = document.getElementById('filterCompetition').value;
+            const goalsF = document.getElementById('filterGoals').value;
+            const dateF = document.getElementById('filterDate').value;
 
             filteredMatchData = rawMatchData.filter(row => {
-                if (matchType && row['Match Type'] !== matchType) return false;
-                if (competition && row['Competition'] !== competition) return false;
-                if (goals && row['Goals Prediction'] !== goals) return false;
-                if (dateVal && row.parsedDate) {
-                    let rowIso = formatDateToISO(row.parsedDate);
-                    if (rowIso !== dateVal) return false;
-                } else if (dateVal && !row.parsedDate) {
-                    return false;
-                }
-                return true;
-            });
-
-            currentPage = 1;
-            renderMatchTable();
-            updateTopSummaryCards();
-        }
-
-        // Robust evaluation: Checks if tip correctness matches outcome direction (e.g. Home win if tip is 2-1 or 3-1 and result is 1-0 or 2-1)
-        function evaluateTipCorrectness(tip, result) {
-            if (!tip || !result) return null;
-            let cleanTip = tip.replace(/\s+/g, '').toLowerCase();
-            let cleanResult = result.replace(/\s+/g, '').toLowerCase();
-            if (cleanTip === cleanResult) return true;
-
-            let tipParts = cleanTip.split(/[-:]/);
-            let resParts = cleanResult.split(/[-:]/);
-            if (tipParts.length === 2 && resParts.length === 2) {
-                let thome = parseInt(tipParts[0], 10);
-                let taway = parseInt(tipParts[1], 10);
-                let rhome = parseInt(resParts[0], 10);
-                let raway = parseInt(resParts[1], 10);
-                if (!isNaN(thome) && !isNaN(taway) && !isNaN(rhome) && !isNaN(raway)) {
-                    let tipHomeWin = thome > taway;
-                    let resHomeWin = rhome > raway;
-                    let tipDraw = thome === taway;
-                    let resDraw = rhome === raway;
-                    let tipAwayWin = thome < taway;
-                    let resAwayWin = rhome < raway;
-                    if ((tipHomeWin && resHomeWin) || (tipDraw && resDraw) || (tipAwayWin && resAwayWin)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        function updateTopSummaryCards() {
-            let total = filteredMatchData.length;
-            let won = 0;
-            let completed = 0;
-
-            filteredMatchData.forEach(row => {
-                let res = row['Match Result'];
-                if (res && res.trim() !== '') {
-                    completed++;
-                    if (evaluateTipCorrectness(row['Score Tip'], res) === true) {
-                        won++;
-                    }
-                }
-            });
-
-            let winRate = completed > 0 ? ((won / completed) * 100).toFixed(1) + '%' : '0.0%';
-
-            document.getElementById('cardTotalMatches').innerText = total;
-            document.getElementById('cardTotalWon').innerText = `${won} / ${completed}`;
-            document.getElementById('cardWinRate').innerText = winRate;
-        }
-
-        function renderMatchTable() {
-            const tbody = document.getElementById('matchesTableBody');
-            tbody.innerHTML = '';
-
-            const totalRows = filteredMatchData.length;
-            const totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
-            if (currentPage > totalPages) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
-
-            const startIdx = (currentPage - 1) * rowsPerPage;
-            const endIdx = Math.min(startIdx + rowsPerPage, totalRows);
-            const pageData = filteredMatchData.slice(startIdx, endIdx);
-
-            document.getElementById('matchCountIndicator').innerText = `Showing ${totalRows === 0 ? 0 : startIdx + 1}-${endIdx} of ${totalRows} matches`;
-            document.getElementById('paginationInfo').innerText = `Page ${currentPage} of ${totalPages}`;
-            document.getElementById('prevBtn').disabled = currentPage <= 1;
-            document.getElementById('nextBtn').disabled = currentPage >= totalPages;
-
-            if (pageData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-12 text-slate-400 border border-slate-300"><i class="fa-solid fa-folder-open text-3xl mb-2"></i><p>No matches match the selected criteria.</p></td></tr>`;
-                return;
-            }
-
-            pageData.forEach((row, index) => {
-                let tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition-colors";
-
-                let isCorrect = evaluateTipCorrectness(row['Score Tip'], row['Match Result']);
-                let tipBadgeClass = "bg-white text-slate-700 border border-slate-300";
-                if (isCorrect === true) {
-                    tipBadgeClass = "bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold";
-                } else if (isCorrect === false && row['Match Result']) {
-                    tipBadgeClass = "bg-rose-100 text-rose-800 border border-rose-300 font-bold";
-                }
-
-                let confValue = row['Prediction Confidence'] ? row['Prediction Confidence'].replace('%', '').trim() : '-';
-
-                tr.innerHTML = `
-                    <td class="py-3 px-3 border border-slate-300 text-xs font-medium text-slate-700">${row['Match Date'] || '-'}</td>
-                    <td class="py-3 px-3 border border-slate-300 text-xs font-semibold text-slate-600 max-w-[150px] truncate" title="${row['Competition']}">${row['Competition'] || '-'}</td>
-                    <td class="py-3 px-3 border border-slate-300">
-                        <div class="font-bold text-slate-900 text-xs">${row['Home Team'] || 'Home'}</div>
-                        <div class="text-slate-500 text-[11px] font-medium">${row['Away Team'] || 'Away'}</div>
-                    </td>
-                    <td class="py-3 px-3 border border-slate-300 text-center text-xs font-mono text-slate-700">
-                        <span class="text-teal-700 font-semibold">${row['Home Odds'] || '-'}</span> / 
-                        <span class="text-slate-500">${row['Draw Odds'] || '-'}</span> / 
-                        <span class="text-orange-700 font-semibold">${row['Away Odds'] || '-'}</span>
-                    </td>
-                    <td class="py-3 px-3 border border-slate-300 text-center">
-                        <span class="inline-block px-2.5 py-1 rounded-lg text-xs ${tipBadgeClass}">${row['Score Tip'] || 'N/A'}</span>
-                    </td>
-                    <td class="py-3 px-3 border border-slate-300 text-center text-xs font-bold text-slate-700">${confValue}</td>
-                    <td class="py-3 px-3 border border-slate-300 text-center text-xs font-bold font-mono text-slate-900">${row['Match Result'] || '<span class="text-slate-400 font-normal">Upcoming</span>'}</td>
-                    <td class="py-3 px-3 border border-slate-300 text-center">
-                        <button onclick="openMatchModal(${startIdx + index})" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center mx-auto">
-                            <i class="fa-solid fa-eye mr-1"></i> View
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function changePage(direction) {
-            currentPage += direction;
-            renderMatchTable();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Modal View Details
-        function openMatchModal(dataIndex) {
-            const row = filteredMatchData[dataIndex];
-            if (!row) return;
-
-            document.getElementById('modalMatchTitle').innerText = `${row['Home Team'] || 'Home'} vs ${row['Away Team'] || 'Away'}`;
-            document.getElementById('modalMatchSubtitle').innerText = `${row['Competition'] || 'Competition'} • ${row['Match Date'] || ''} (${row['Match Type'] || 'General'})`;
-
-            const bodyContent = document.getElementById('modalBodyContent');
-            let confVal = row['Prediction Confidence'] ? row['Prediction Confidence'].replace('%', '').trim() : 'N/A';
-            
-            bodyContent.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Team Form -->
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-teal-700 flex items-center"><i class="fa-solid fa-chart-line mr-2"></i> Team Form & Standing</h4>
-                        <div class="space-y-2 text-xs">
-                            <div class="flex justify-between pb-1 border-b border-slate-200">
-                                <span class="text-slate-500 font-medium">Home Form:</span>
-                                <span class="font-semibold text-slate-800">${row['Home Form'] || 'N/A'}</span>
-                            </div>
-                            <div class="flex justify-between pb-1 border-b border-slate-200">
-                                <span class="text-slate-500 font-medium">Away Form:</span>
-                                <span class="font-semibold text-slate-800">${row['Away Form'] || 'N/A'}</span>
-                            </div>
-                            <div class="flex justify-between pb-1 border-b border-slate-200">
-                                <span class="text-slate-500 font-medium">Home Position:</span>
-                                <span class="font-bold text-teal-700">#${row['Home Position'] || 'N/A'}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-500 font-medium">Away Position:</span>
-                                <span class="font-bold text-orange-700">#${row['Away Position'] || 'N/A'}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Predictions & Odds -->
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-blue-700 flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Predictions & Odds</h4>
-                        <div class="space-y-2 text-xs">
-                            <div class="flex justify-between pb-1 border-b border-slate-200">
-                                <span class="text-slate-500 font-medium">Prediction Confidence:</span>
-                                <span class="font-bold text-slate-700">${confVal}</span>
-                            </div>
-                            <div class="flex justify-between pb-1 border-b border-slate-200">
-                                <span class="text-slate-500 font-medium">Goals Prediction:</span>
-                                <span class="font-semibold text-slate-800">${row['Goals Prediction'] || 'N/A'}</span>
-                            </div>
-                            <div class="flex justify-between pb-1 border-b border-slate-200">
-                                <span class="text-slate-500 font-medium">Match Result:</span>
-                                <span class="font-mono font-bold text-emerald-700">${row['Match Result'] || 'Upcoming'}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-500 font-medium">Odds (H / D / A):</span>
-                                <span class="font-mono text-slate-800">${row['Home Odds'] || '-'} / ${row['Draw Odds'] || '-'} / ${row['Away Odds'] || '-'}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Head to Head & Averages -->
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-purple-700 flex items-center"><i class="fa-solid fa-people-arrows mr-2"></i> H2H & Goal Averages</h4>
-                        <div class="space-y-2 text-xs">
-                            <div class="flex justify-between pb-1 border-b border-slate-200">
-                                <span class="text-slate-500 font-medium">H2H (Home Win / Draw / Away):</span>
-                                <span class="font-bold text-slate-800">${row['H2H Home Win'] || 0} / ${row['H2H Draws'] || 0} / ${row['H2H Away Win'] || 0}</span>
-                            </div>
-                            <div class="flex justify-between pb-1 border-b border-slate-200">
-                                <span class="text-slate-500 font-medium">Avg Home Scored / Conceded:</span>
-                                <span class="font-mono text-slate-800">${row['Avg Home Scored'] || '0'} / ${row['Avg Home Conceded'] || '0'}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-500 font-medium">Avg Away Scored / Conceded:</span>
-                                <span class="font-mono text-slate-800">${row['Avg Away Scored'] || '0'} / ${row['Avg Away Conceded'] || '0'}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Power Metrics & Link -->
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-orange-700 flex items-center"><i class="fa-solid fa-bolt mr-2"></i> Power Ratings & URL</h4>
-                        <div class="space-y-2 text-xs">
-                            <div class="flex justify-between pb-1 border-b border-slate-200">
-                                <span class="text-slate-500 font-medium">Home Power / Away Power:</span>
-                                <span class="font-bold text-slate-800">${row['Home Power'] || 'N/A'} / ${row['Away Power'] || 'N/A'}</span>
-                            </div>
-                            <div class="pt-1">
-                                <span class="text-slate-500 font-medium block mb-1">Match Source Link:</span>
-                                ${row['Match URL'] ? `<a href="${row['Match URL']}" target="_blank" class="text-teal-600 hover:underline truncate block"><i class="fa-solid fa-external-link-alt mr-1"></i> ${row['Match URL']}</a>` : '<span class="text-slate-400">No URL available</span>'}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('matchModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('matchModal').classList.add('hidden');
-        }
-
-        // Analytics Tab Implementation (Last 5 Days Window & Outcome Verification)
-        function renderAnalytics() {
-            const matchTypeF = document.getElementById('analFilterMatchType').value;
-            const competitionF = document.getElementById('analFilterCompetition').value;
-            const dateF = document.getElementById('analFilterDate').value;
-            const scoreTipF = document.getElementById('analFilterScoreTip').value;
-            const goalsF = document.getElementById('analFilterGoals').value;
-
-            const now = new Date();
-            const fiveDaysAgo = new Date();
-            fiveDaysAgo.setDate(now.getDate() - 5);
-
-            let evaluatedRows = rawMatchData.filter(row => {
                 if (matchTypeF && row['Match Type'] !== matchTypeF) return false;
                 if (competitionF && row['Competition'] !== competitionF) return false;
-                if (scoreTipF && row['Score Tip'] !== scoreTipF) return false;
                 if (goalsF && row['Goals Prediction'] !== goalsF) return false;
                 if (dateF && row.parsedDate) {
                     if (formatDateToISO(row.parsedDate) !== dateF) return false;
@@ -768,8 +666,219 @@
                 return true;
             });
 
-            document.getElementById('statTotalFiltered').innerText = evaluatedRows.length;
+            currentPage = 1;
+            renderTable();
+            updateTopKPIs();
+        }
 
+        function updateTopKPIs() {
+            let total = filteredMatchData.length;
+            let totalWon = 0;
+
+            filteredMatchData.forEach(row => {
+                if (evaluateTipCorrectness(row['Score Tip'], row['Match Result']) === true) {
+                    totalWon++;
+                }
+            });
+
+            let winRate = total > 0 ? ((totalWon / total) * 100).toFixed(1) : '0.0';
+
+            document.getElementById('statTotalMatches').innerText = total;
+            document.getElementById('statTotalWon').innerText = totalWon;
+            document.getElementById('statWinRate').innerText = winRate + '%';
+        }
+
+        function changePage(direction) {
+            let maxPages = Math.ceil(filteredMatchData.length / pageSize) || 1;
+            currentPage += direction;
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > maxPages) currentPage = maxPages;
+            renderTable();
+        }
+
+        // Logic to determine if tip has won based on goal difference or outcome direction
+        function evaluateTipCorrectness(tip, result) {
+            if (!tip || !result || result.trim() === '') return null; // Unplayed or missing data
+
+            let tipParts = tip.replace(/\s+/g, '').toLowerCase().split(/[-:]/);
+            let resParts = result.replace(/\s+/g, '').toLowerCase().split(/[-:]/);
+
+            if (tipParts.length !== 2 || resParts.length !== 2) return null;
+
+            let tipHome = parseInt(tipParts[0], 10);
+            let tipAway = parseInt(tipParts[1], 10);
+            let resHome = parseInt(resParts[0], 10);
+            let resAway = parseInt(resParts[1], 10);
+
+            if (isNaN(tipHome) || isNaN(tipAway) || isNaN(resHome) || isNaN(resAway)) return null;
+
+            // Exact match
+            if (tipHome === resHome && tipAway === resAway) return true;
+
+            // Directional match (Home win vs Home win, Away win vs Away win, Draw vs Draw)
+            let tipOutcome = tipHome > tipAway ? 'H' : (tipHome < tipAway ? 'A' : 'D');
+            let resOutcome = resHome > resAway ? 'H' : (resHome < resAway ? 'A' : 'D');
+
+            return tipOutcome === resOutcome;
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('matchesTableBody');
+            tbody.innerHTML = '';
+
+            let totalMatches = filteredMatchData.length;
+            document.getElementById('matchCountLabel').innerText = `Showing ${totalMatches} matches`;
+
+            let maxPages = Math.ceil(totalMatches / pageSize) || 1;
+            if (currentPage > maxPages) currentPage = maxPages;
+
+            let startIndex = (currentPage - 1) * pageSize;
+            let endIndex = Math.min(startIndex + pageSize, totalMatches);
+            let paginatedRows = filteredMatchData.slice(startIndex, endIndex);
+
+            document.getElementById('paginationInfo').innerText = `Page ${currentPage} of ${maxPages} (${startIndex + 1}-${endIndex} of ${totalMatches})`;
+            document.getElementById('prevPageBtn').disabled = currentPage <= 1;
+            document.getElementById('nextPageBtn').disabled = currentPage >= maxPages;
+
+            if (paginatedRows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="11" class="text-center py-8 text-slate-400 font-medium">No matches found matching the selected filters.</td></tr>`;
+                return;
+            }
+
+            paginatedRows.forEach((row, index) => {
+                let isWon = evaluateTipCorrectness(row['Score Tip'], row['Match Result']);
+                let tipBgClass = "bg-slate-100 text-slate-800";
+                if (isWon === true) {
+                    tipBgClass = "bg-emerald-100 text-emerald-800 font-bold border border-emerald-300";
+                } else if (isWon === false) {
+                    tipBgClass = "bg-rose-100 text-rose-800 font-bold border border-rose-300";
+                }
+
+                let globalIdx = startIndex + index;
+
+                let tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/80 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-3 px-4 border border-slate-200 font-medium text-slate-700 whitespace-nowrap">${row['Match Date'] || '-'}</td>
+                    <td class="py-3 px-4 border border-slate-200 font-semibold text-slate-800">${row['Competition'] || '-'}</td>
+                    <td class="py-3 px-4 border border-slate-200 font-bold text-slate-900">${row['Home Team'] || '-'}</td>
+                    <td class="py-3 px-4 border border-slate-200 font-bold text-slate-900">${row['Away Team'] || '-'}</td>
+                    <td class="py-3 px-4 border border-slate-200 text-center font-mono text-slate-700">${row['Home Odds'] || '-'}</td>
+                    <td class="py-3 px-4 border border-slate-200 text-center font-mono text-slate-700">${row['Draw Odds'] || '-'}</td>
+                    <td class="py-3 px-4 border border-slate-200 text-center font-mono text-slate-700">${row['Away Odds'] || '-'}</td>
+                    <td class="py-3 px-4 border border-slate-200 text-center"><span class="px-2.5 py-1 rounded-lg text-xs font-mono inline-block ${tipBgClass}">${row['Score Tip'] || '-'}</span></td>
+                    <td class="py-3 px-4 border border-slate-200 text-center font-mono font-bold text-slate-800">${row['Prediction Confidence'] || '-'}</td>
+                    <td class="py-3 px-4 border border-slate-200 text-center font-mono font-bold text-teal-700">${row['Match Result'] || '<span class="text-slate-400 font-normal">Upcoming</span>'}</td>
+                    <td class="py-3 px-4 border border-slate-200 text-center">
+                        <button onclick="openMatchModal(${globalIdx})" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold transition shadow-sm inline-flex items-center">
+                            <i class="fa-solid fa-eye mr-1"></i> View
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Modal Dossier Logic
+        function openMatchModal(dataIndex) {
+            let row = filteredMatchData[dataIndex];
+            if (!row) return;
+
+            document.getElementById('modalMatchTitle').innerText = `${row['Home Team']} vs ${row['Away Team']}`;
+            document.getElementById('modalMatchSubtitle').innerText = `${row['Competition'] || 'League Match'} • ${row['Match Date'] || ''}`;
+
+            let urlLink = document.getElementById('modalMatchUrlLink');
+            if (row['Match URL']) {
+                urlLink.href = row['Match URL'];
+                urlLink.classList.remove('hidden');
+            } else {
+                urlLink.classList.add('hidden');
+            }
+
+            let isWon = evaluateTipCorrectness(row['Score Tip'], row['Match Result']);
+            let resultBadge = row['Match Result'] || 'Upcoming';
+            if (isWon === true) resultBadge += ' (Won ✅)';
+            else if (isWon === false) resultBadge += ' (Lost ❌)';
+
+            const content = document.getElementById('modalBodyContent');
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-teal-700 flex items-center">
+                            <i class="fa-solid fa-chart-bar mr-2"></i> Team Form & Confidence
+                        </h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between border-b border-slate-200 pb-1.5"><span class="text-slate-500 font-medium">Home Form:</span> <strong class="text-slate-800">${row['Home Form'] || '-'}</strong></div>
+                            <div class="flex justify-between border-b border-slate-200 pb-1.5"><span class="text-slate-500 font-medium">Away Form:</span> <strong class="text-slate-800">${row['Away Form'] || '-'}</strong></div>
+                            <div class="flex justify-between border-b border-slate-200 pb-1.5"><span class="text-slate-500 font-medium">Prediction Confidence:</span> <strong class="text-slate-800 font-mono">${row['Prediction Confidence'] || '-'}</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-500 font-medium">Goals Prediction:</span> <strong class="text-slate-800 font-mono">${row['Goals Prediction'] || '-'}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-teal-700 flex items-center">
+                            <i class="fa-solid fa-handshake mr-2"></i> Head-to-Head & League Standings
+                        </h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between border-b border-slate-200 pb-1.5"><span class="text-slate-500 font-medium">H2H (Home / Draw / Away):</span> <strong class="text-slate-800 font-mono">${row['H2H Home Win'] || '0'} - ${row['H2H Draws'] || '0'} - ${row['H2H Away Win'] || '0'}</strong></div>
+                            <div class="flex justify-between border-b border-slate-200 pb-1.5"><span class="text-slate-500 font-medium">Team Power (Home / Away):</span> <strong class="text-slate-800 font-mono">${row['Home Power'] || '-'} / ${row['Away Power'] || '-'}</strong></div>
+                            <div class="flex justify-between border-b border-slate-200 pb-1.5"><span class="text-slate-500 font-medium">League Position (Home / Away):</span> <strong class="text-slate-800 font-mono">#${row['Home Position'] || '-'} vs #${row['Away Position'] || '-'}</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-500 font-medium">Match Result:</span> <strong class="text-teal-700 font-mono">${resultBadge}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 md:col-span-2 space-y-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-teal-700 flex items-center">
+                            <i class="fa-solid fa-futbol mr-2"></i> Scoring Averages & Odds
+                        </h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center"><span class="text-slate-400 block text-[10px] uppercase font-semibold">Home Scored Avg</span><strong class="text-slate-800 font-mono text-sm">${row['Avg Home Scored'] || '-'}</strong></div>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center"><span class="text-slate-400 block text-[10px] uppercase font-semibold">Away Scored Avg</span><strong class="text-slate-800 font-mono text-sm">${row['Avg Away Scored'] || '-'}</strong></div>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center"><span class="text-slate-400 block text-[10px] uppercase font-semibold">Home Conceded Avg</span><strong class="text-slate-800 font-mono text-sm">${row['Avg Home Conceded'] || '-'}</strong></div>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center"><span class="text-slate-400 block text-[10px] uppercase font-semibold">Away Conceded Avg</span><strong class="text-slate-800 font-mono text-sm">${row['Avg Away Conceded'] || '-'}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('matchDetailModal').classList.remove('hidden');
+        }
+
+        function closeMatchModal() {
+            document.getElementById('matchDetailModal').classList.add('hidden');
+        }
+
+        // Analytics Tab Implementation
+        function renderAnalytics() {
+            const matchTypeF = document.getElementById('analFilterMatchType').value;
+            const competitionF = document.getElementById('analFilterCompetition').value;
+            const dateF = document.getElementById('analFilterDate').value;
+            const scoreTipF = document.getElementById('analFilterScoreTip').value;
+            const goalsF = document.getElementById('analFilterGoals').value;
+
+            // Window: last 5 days relative to today or max date in dataset
+            let today = new Date();
+            let fiveDaysAgo = new Date(today);
+            fiveDaysAgo.setDate(today.getDate() - 5);
+
+            let filteredRows = rawMatchData.filter(row => {
+                if (matchTypeF && row['Match Type'] !== matchTypeF) return false;
+                if (competitionF && row['Competition'] !== competitionF) return false;
+                if (scoreTipF && row['Score Tip'] !== scoreTipF) return false;
+                if (goalsF && row['Goals Prediction'] !== goalsF) return false;
+                if (dateF && row.parsedDate) {
+                    if (formatDateToISO(row.parsedDate) !== dateF) return false;
+                } else if (dateF && !row.parsedDate) {
+                    return false;
+                }
+                // Last 5 days check if no specific date filter
+                if (!dateF && row.parsedDate) {
+                    if (row.parsedDate < fiveDaysAgo) return false;
+                }
+                return true;
+            });
+
+            // Group by Match Type
             let matchTypesMap = {};
             rawMatchData.forEach(r => {
                 let mt = r['Match Type'] || 'Uncategorized';
@@ -778,13 +887,11 @@
             });
 
             const modelKeys = Object.keys(matchTypesMap);
-            document.getElementById('statTotalModels').innerText = modelKeys.length;
-
-            let totalWinsAcrossAll = 0;
-            let totalCompletedAcrossAll = 0;
-
             const container = document.getElementById('modelTablesContainer');
             container.innerHTML = '';
+
+            let totalEvaluatedGlobal = 0;
+            let totalWinsGlobal = 0;
 
             if (modelKeys.length === 0) {
                 container.innerHTML = `<div class="bg-slate-50 p-8 rounded-2xl text-center text-slate-500 border border-slate-200">No match type models discovered in data.</div>`;
@@ -800,44 +907,66 @@
                     if (goalsF && row['Goals Prediction'] !== goalsF) return false;
                     if (dateF && row.parsedDate) {
                         if (formatDateToISO(row.parsedDate) !== dateF) return false;
+                    } else if (!dateF && row.parsedDate) {
+                        if (row.parsedDate < fiveDaysAgo) return false;
                     }
                     return true;
                 });
 
-                let modelTotalMatches = modelFiltered.length;
                 let homePredictedCount = 0;
                 let awayPredictedCount = 0;
                 let drawPredictedCount = 0;
-                let modelWins = 0;
-                let modelCompleted = 0;
+                let winsCount = 0;
+                let completedCount = 0;
+
+                let tableRowsHtml = '';
 
                 modelFiltered.forEach(r => {
                     let tip = r['Score Tip'] || '';
-                    let res = r['Match Result'] || '';
+                    let tipParts = tip.replace(/\s+/g, '').toLowerCase().split(/[-:]/);
+                    let isHomePred = false;
+                    let isAwayPred = false;
+                    let isDrawPred = false;
 
-                    let parts = tip.split(/[-:]/);
-                    if (parts.length === 2) {
-                        let h = parseInt(parts[0], 10);
-                        let a = parseInt(parts[1], 10);
-                        if (!isNaN(h) && !isNaN(a)) {
-                            if (h > a) homePredictedCount++;
-                            else if (h < a) awayPredictedCount++;
-                            else drawPredictedCount++;
+                    if (tipParts.length === 2) {
+                        let th = parseInt(tipParts[0], 10);
+                        let ta = parseInt(tipParts[1], 10);
+                        if (!isNaN(th) && !isNaN(ta)) {
+                            if (th > ta) { homePredictedCount++; isHomePred = true; }
+                            else if (th < ta) { awayPredictedCount++; isAwayPred = true; }
+                            else { drawPredictedCount++; isDrawPred = true; }
                         }
                     }
 
-                    if (res && res.trim() !== '') {
-                        modelCompleted++;
-                        let isCorr = evaluateTipCorrectness(tip, res);
+                    let isCorr = evaluateTipCorrectness(r['Score Tip'], r['Match Result']);
+                    let badgeClass = "bg-slate-100 text-slate-700";
+                    let outcomeText = "Upcoming";
+                    if (isCorr !== null) {
+                        completedCount++;
+                        totalEvaluatedGlobal++;
                         if (isCorr === true) {
-                            modelWins++;
+                            winsCount++;
+                            totalWinsGlobal++;
+                            badgeClass = "bg-emerald-100 text-emerald-800 font-bold";
+                            outcomeText = "Won";
+                        } else {
+                            badgeClass = "bg-rose-100 text-rose-800 font-bold";
+                            outcomeText = "Lost";
                         }
                     }
+
+                    tableRowsHtml += `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="py-2.5 px-3 border border-slate-200 text-xs font-medium text-slate-700">${r['Match Date'] || '-'}</td>
+                            <td class="py-2.5 px-3 border border-slate-200 text-xs font-semibold text-slate-800">${r['Home Team']} vs ${r['Away Team']}</td>
+                            <td class="py-2.5 px-3 border border-slate-200 text-center text-xs font-mono font-bold text-slate-700">${r['Score Tip'] || '-'}</td>
+                            <td class="py-2.5 px-3 border border-slate-200 text-center text-xs font-mono text-slate-900">${r['Match Result'] || 'Upcoming'}</td>
+                            <td class="py-2.5 px-3 border border-slate-200 text-center"><span class="px-2 py-1 rounded-lg text-xs ${badgeClass}">${outcomeText}</span></td>
+                        </tr>
+                    `;
                 });
 
-                totalWinsAcrossAll += modelWins;
-                totalCompletedAcrossAll += modelCompleted;
-                let winRate = modelCompleted > 0 ? ((modelWins / modelCompleted) * 100).toFixed(1) : '0.0';
+                let modelWinRate = completedCount > 0 ? ((winsCount / completedCount) * 100).toFixed(1) : '0.0';
 
                 let card = document.createElement('div');
                 card.className = "bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4";
@@ -845,38 +974,210 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-2">
                         <div>
                             <span class="px-3 py-1 bg-teal-50 text-teal-700 border border-teal-200 rounded-xl text-xs font-bold uppercase tracking-wider">${modelName}</span>
-                            <h4 class="text-base font-bold text-slate-900 mt-2">Model Performance & Analytics</h4>
+                            <h4 class="text-base font-bold text-slate-900 mt-2">Model Performance Summary</h4>
                         </div>
-                        <div class="flex items-center space-x-3 text-xs font-semibold">
-                            <span class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700">Total Matches: <strong class="text-slate-900">${modelTotalMatches}</strong></span>
-                            <span class="px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800">Wins: <strong>${modelWins}/${modelCompleted}</strong> (${winRate}%)</span>
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+                            <span class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700">Home Predicted: <strong class="text-slate-900">${homePredictedCount}</strong></span>
+                            <span class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700">Away Predicted: <strong class="text-slate-900">${awayPredictedCount}</strong></span>
+                            <span class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700">Draw Predicted: <strong class="text-slate-900">${drawPredictedCount}</strong></span>
+                            <span class="px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800">Won: <strong class="text-emerald-900">${winsCount}/${completedCount}</strong></span>
+                            <span class="px-3 py-1.5 bg-purple-50 border border-purple-200 rounded-xl text-purple-800">Win Rate: <strong class="text-purple-900">${modelWinRate}%</strong></span>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
-                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Home Predicted</p>
-                            <p class="text-xl font-black text-teal-700 mt-1">${homePredictedCount}</p>
-                        </div>
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
-                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Away Predicted</p>
-                            <p class="text-xl font-black text-orange-700 mt-1">${awayPredictedCount}</p>
-                        </div>
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
-                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Draw Predicted</p>
-                            <p class="text-xl font-black text-blue-700 mt-1">${drawPredictedCount}</p>
-                        </div>
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
-                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Accuracy Rate</p>
-                            <p class="text-xl font-black text-purple-700 mt-1">${winRate}%</p>
-                        </div>
+                    <div class="overflow-x-auto max-h-60 overflow-y-auto">
+                        <table class="w-full text-left border-collapse border border-slate-200">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-600 uppercase text-[11px] tracking-wider font-bold">
+                                    <th class="py-2 px-3 border border-slate-200">Date</th>
+                                    <th class="py-2 px-3 border border-slate-200">Match</th>
+                                    <th class="py-2 px-3 border border-slate-200 text-center">Score Tip</th>
+                                    <th class="py-2 px-3 border border-slate-200 text-center">Match Result</th>
+                                    <th class="py-2 px-3 border border-slate-200 text-center">Outcome</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-xs">
+                                ${tableRowsHtml || '<tr><td colspan="5" class="text-center py-6 text-slate-400">No matches found for this model under current filters.</td></tr>'}
+                            </tbody>
+                        </table>
                     </div>
                 `;
                 container.appendChild(card);
             });
 
-            let overallWinRateVal = totalCompletedAcrossAll > 0 ? ((totalWinsAcrossAll / totalCompletedAcrossAll) * 100).toFixed(1) : '0.0';
-            document.getElementById('statOverallWinRate').innerText = overallWinRateVal + '%';
+            document.getElementById('statTotalFiltered').innerText = totalEvaluatedGlobal;
+            document.getElementById('statTotalModels').innerText = modelKeys.length;
+            document.getElementById('statOverallWinRate').innerText = (totalEvaluatedGlobal > 0 ? ((totalWinsGlobal / totalEvaluatedGlobal) * 100).toFixed(1) : '0.0') + '%';
+        }
+
+        // Helper to calculate match bet result and financial return for ROI tab
+        function calculateMatchBetResult(row) {
+            let tip = row['Score Tip'] || '';
+            let res = row['Match Result'] || '';
+            if (!res || res.trim() === '') return { completed: false, won: false, oddsUsed: 0, staked: 0, returnAmount: 0, profit: 0 };
+
+            let isCorr = evaluateTipCorrectness(tip, res);
+            let tipParts = tip.replace(/\s+/g, '').toLowerCase().split(/[-:]/);
+            
+            let chosenOdds = 0;
+            if (tipParts.length === 2) {
+                let th = parseInt(tipParts[0], 10);
+                let ta = parseInt(tipParts[1], 10);
+                if (!isNaN(th) && !isNaN(ta)) {
+                    if (th > ta) chosenOdds = parseFloat(row['Home Odds']) || 0;
+                    else if (th === ta) chosenOdds = parseFloat(row['Draw Odds']) || 0;
+                    else chosenOdds = parseFloat(row['Away Odds']) || 0;
+                }
+            }
+            if (chosenOdds <= 0) chosenOdds = 1.85; // fallback odds if unparsed
+
+            let staked = 100;
+            if (isCorr === true) {
+                let returnAmount = staked * chosenOdds;
+                return { completed: true, won: true, oddsUsed: chosenOdds, staked: staked, returnAmount: returnAmount, profit: returnAmount - staked };
+            } else {
+                return { completed: true, won: false, oddsUsed: chosenOdds, staked: staked, returnAmount: 0, profit: -staked };
+            }
+        }
+
+        // ROI & Profit Analytics Implementation
+        function renderRoiAnalytics() {
+            const matchTypeF = document.getElementById('roiFilterMatchType').value;
+            const competitionF = document.getElementById('roiFilterCompetition').value;
+            const dateF = document.getElementById('roiFilterDate').value;
+            const scoreTipF = document.getElementById('roiFilterScoreTip').value;
+            const goalsF = document.getElementById('roiFilterGoals').value;
+
+            let matchTypesMap = {};
+            rawMatchData.forEach(r => {
+                let mt = r['Match Type'] || 'Uncategorized';
+                if (!matchTypesMap[mt]) matchTypesMap[mt] = [];
+                matchTypesMap[mt].push(r);
+            });
+
+            const modelKeys = Object.keys(matchTypesMap);
+            const container = document.getElementById('roiTablesContainer');
+            container.innerHTML = '';
+
+            let globalStaked = 0;
+            let globalReturns = 0;
+            let globalProfit = 0;
+
+            if (modelKeys.length === 0) {
+                container.innerHTML = `<div class="bg-slate-50 p-8 rounded-2xl text-center text-slate-500 border border-slate-200">No match type models discovered in data.</div>`;
+                return;
+            }
+
+            modelKeys.forEach(modelName => {
+                let rowsForModel = matchTypesMap[modelName];
+
+                let modelFiltered = rowsForModel.filter(row => {
+                    if (matchTypeF && row['Match Type'] !== matchTypeF) return false;
+                    if (competitionF && row['Competition'] !== competitionF) return false;
+                    if (scoreTipF && row['Score Tip'] !== scoreTipF) return false;
+                    if (goalsF && row['Goals Prediction'] !== goalsF) return false;
+                    if (dateF && row.parsedDate) {
+                        if (formatDateToISO(row.parsedDate) !== dateF) return false;
+                    } else if (dateF && !row.parsedDate) {
+                        return false;
+                    }
+                    return true;
+                });
+
+                let modelStaked = 0;
+                let modelReturns = 0;
+                let modelProfit = 0;
+                let tableRowsHtml = '';
+
+                modelFiltered.forEach(r => {
+                    let betRes = calculateMatchBetResult(r);
+                    if (betRes.completed) {
+                        modelStaked += betRes.staked;
+                        modelReturns += betRes.returnAmount;
+                        modelProfit += betRes.profit;
+
+                        globalStaked += betRes.staked;
+                        globalReturns += betRes.returnAmount;
+                        globalProfit += betRes.profit;
+                    }
+
+                    let badgeClass = "bg-slate-100 text-slate-700";
+                    let outcomeText = "Upcoming";
+                    if (betRes.completed) {
+                        if (betRes.won) {
+                            badgeClass = "bg-emerald-100 text-emerald-800 font-bold";
+                            outcomeText = `Won (+${betRes.profit.toFixed(1)})`;
+                        } else {
+                            badgeClass = "bg-rose-100 text-rose-800 font-bold";
+                            outcomeText = `Lost (-100)`;
+                        }
+                    }
+
+                    tableRowsHtml += `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="py-2.5 px-3 border border-slate-200 text-xs font-medium text-slate-700">${r['Match Date'] || '-'}</td>
+                            <td class="py-2.5 px-3 border border-slate-200 text-xs font-semibold text-slate-800">${r['Home Team']} vs ${r['Away Team']}</td>
+                            <td class="py-2.5 px-3 border border-slate-200 text-center text-xs font-mono font-bold text-slate-700">${r['Score Tip'] || '-'}</td>
+                            <td class="py-2.5 px-3 border border-slate-200 text-center text-xs font-mono text-teal-700 font-semibold">${betRes.oddsUsed > 0 ? betRes.oddsUsed.toFixed(2) : '-'}</td>
+                            <td class="py-2.5 px-3 border border-slate-200 text-center text-xs font-mono text-slate-900">${r['Match Result'] || 'Upcoming'}</td>
+                            <td class="py-2.5 px-3 border border-slate-200 text-center"><span class="px-2 py-1 rounded-lg text-xs ${badgeClass}">${outcomeText}</span></td>
+                            <td class="py-2.5 px-3 border border-slate-200 text-right text-xs font-mono font-bold ${betRes.profit >= 0 ? 'text-emerald-700' : 'text-rose-700'}">${betRes.completed ? betRes.profit.toFixed(1) : '0.0'}</td>
+                        </tr>
+                    `;
+                });
+
+                let modelRoi = modelStaked > 0 ? ((modelProfit / modelStaked) * 100).toFixed(1) : '0.0';
+
+                let card = document.createElement('div');
+                card.className = "bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4";
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-2">
+                        <div>
+                            <span class="px-3 py-1 bg-teal-50 text-teal-700 border border-teal-200 rounded-xl text-xs font-bold uppercase tracking-wider">${modelName}</span>
+                            <h4 class="text-base font-bold text-slate-900 mt-2">Model ROI & Financial Ledger</h4>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+                            <span class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700">Staked: <strong class="text-slate-900">${modelStaked.toFixed(0)}</strong></span>
+                            <span class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700">Returns: <strong class="text-slate-900">${modelReturns.toFixed(1)}</strong></span>
+                            <span class="px-3 py-1.5 ${modelProfit >= 0 ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-rose-50 border-rose-200 text-rose-800'} rounded-xl">Profit: <strong>${modelProfit >= 0 ? '+' : ''}${modelProfit.toFixed(1)}</strong></span>
+                            <span class="px-3 py-1.5 bg-purple-50 border border-purple-200 rounded-xl text-purple-800">ROI: <strong>${modelRoi}%</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto max-h-64 overflow-y-auto">
+                        <table class="w-full text-left border-collapse border border-slate-200">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-600 uppercase text-[11px] tracking-wider font-bold">
+                                    <th class="py-2 px-3 border border-slate-200">Date</th>
+                                    <th class="py-2 px-3 border border-slate-200">Match</th>
+                                    <th class="py-2 px-3 border border-slate-200 text-center">Tip</th>
+                                    <th class="py-2 px-3 border border-slate-200 text-center">Odds</th>
+                                    <th class="py-2 px-3 border border-slate-200 text-center">Result</th>
+                                    <th class="py-2 px-3 border border-slate-200 text-center">Outcome</th>
+                                    <th class="py-2 px-3 border border-slate-200 text-right">Net Profit</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-xs">
+                                ${tableRowsHtml || '<tr><td colspan="7" class="text-center py-6 text-slate-400">No matches for this model under current filters.</td></tr>'}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            let overallRoi = globalStaked > 0 ? ((globalProfit / globalStaked) * 100).toFixed(1) : '0.0';
+
+            document.getElementById('roiTotalStaked').innerText = globalStaked.toFixed(0);
+            document.getElementById('roiTotalReturns').innerText = globalReturns.toFixed(1);
+            
+            const profitElem = document.getElementById('roiTotalProfit');
+            profitElem.innerText = (globalProfit >= 0 ? '+' : '') + globalProfit.toFixed(1);
+            profitElem.className = `text-2xl font-black mt-1 ${globalProfit >= 0 ? 'text-emerald-700' : 'text-rose-700'}`;
+
+            const roiElem = document.getElementById('roiPercentage');
+            roiElem.innerText = overallRoi + '%';
+            roiElem.className = `text-2xl font-black mt-1 ${globalProfit >= 0 ? 'text-purple-700' : 'text-rose-700'}`;
         }
     </script>
 </body>
