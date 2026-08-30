@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Andean Explorer Soccer Intelligence</title>
+    
+    <!-- Fix for favicon 404 error - Uses a soccer ball emoji as the icon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -65,7 +69,6 @@
                 <div>
                     <h1 class="text-xl font-extrabold tracking-tight text-slate-900 flex items-center">
                         Andean Explorer
-                        <span class="ml-2 px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-teal-50 text-teal-700 border border-teal-200 rounded-full">AI Intel</span>
                     </h1>
                     <p class="text-xs font-medium text-slate-500">Advanced Soccer Analytics & Predictive Models</p>
                 </div>
@@ -96,10 +99,20 @@
         </div>
 
         <!-- Error State -->
-        <div id="errorState" class="hidden bg-red-50 border border-red-200 text-red-800 p-6 rounded-2xl text-center max-w-lg mx-auto my-12 shadow-sm">
+        <div id="errorState" class="hidden bg-red-50 border border-red-200 text-red-800 p-6 rounded-2xl text-center max-w-2xl mx-auto my-12 shadow-sm">
             <i class="fa-solid fa-triangle-exclamation text-3xl mb-3 text-red-500"></i>
             <h3 class="text-lg font-bold">Failed to load match data</h3>
-            <p id="errorMessage" class="text-sm text-red-600 mt-2"></p>
+            <p id="errorMessage" class="text-sm text-red-600 mt-2 font-medium"></p>
+            <div class="mt-4 text-xs text-left text-red-700 bg-red-100/50 p-4 rounded-xl border border-red-200">
+                <strong class="block mb-1">How to fix Google Sheets connection issues:</strong>
+                <ol class="list-decimal pl-4 space-y-1">
+                    <li>Open your Google Sheet.</li>
+                    <li>Click <strong>Share</strong> (top right) and change General Access to <strong>"Anyone with the link"</strong>.</li>
+                    <li>Go to <strong>File > Share > Publish to web</strong>.</li>
+                    <li>Select the specific sheet and format <strong>"Comma-separated values (.csv)"</strong>.</li>
+                    <li>Click Publish and ensure the URL matches the <code>CSV_URL</code> in this code.</li>
+                </ol>
+            </div>
             <button onclick="loadCSVData()" class="mt-4 px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl font-medium text-sm transition shadow-sm">Retry Connection</button>
         </div>
 
@@ -446,7 +459,7 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 font-medium mt-auto">
-        <p>&copy; 2026 Andean Explorer Soccer Intelligence. Powered by Published Google Sheets CSV.</p>
+        <p>&copy; 2026 Andean Explorer.</p>
     </footer>
 
     <!-- Application Script -->
@@ -458,6 +471,23 @@
         let currentPage = 1;
         const pageSize = 30;
 
+        function mapMatchType(type) {
+            if (!type) return type;
+            const t = type.trim();
+            if (t === 'Bets of the day - Bankers') return 'High Probability';
+            if (t === 'Value Bets of the day') return 'High Odds';
+            if (t === 'DRAW bet of the day') return 'High Risk';
+            return t;
+        }
+
+        // Fallback mock data in case the Google Sheet is inaccessible
+        const mockData = [
+            { "Match Date": "Friday 28th August 2026", "Match Type": "League", "Competition": "Premier League", "Home Team": "Arsenal", "Away Team": "Chelsea", "Home Odds": "2.10", "Draw Odds": "3.50", "Away Odds": "3.20", "Score Tip": "2-1", "Goals Prediction": "Over 2.5", "Prediction Confidence": "High", "Match Result": "2-1", "Home Form": "WWD", "Away Form": "LWD", "H2H Home Win": "5", "H2H Draws": "2", "H2H Away Win": "3", "Home Power": "85", "Away Power": "82", "Home Position": "2", "Away Position": "5", "Avg Home Scored": "2.1", "Avg Away Scored": "1.5", "Avg Home Conceded": "0.9", "Avg Away Conceded": "1.2" },
+            { "Match Date": "Saturday 29th August 2026", "Match Type": "League", "Competition": "La Liga", "Home Team": "Real Madrid", "Away Team": "Barcelona", "Home Odds": "2.50", "Draw Odds": "3.60", "Away Odds": "2.80", "Score Tip": "1-1", "Goals Prediction": "Under 3.5", "Prediction Confidence": "Medium", "Match Result": "1-2", "Home Form": "WWW", "Away Form": "WWW", "H2H Home Win": "4", "H2H Draws": "3", "H2H Away Win": "3", "Home Power": "90", "Away Power": "89", "Home Position": "1", "Away Position": "2", "Avg Home Scored": "2.5", "Avg Away Scored": "2.4", "Avg Home Conceded": "0.8", "Avg Away Conceded": "0.7" },
+            { "Match Date": "Sunday 30th August 2026", "Match Type": "Cup", "Competition": "FA Cup", "Home Team": "Man City", "Away Team": "Liverpool", "Home Odds": "1.90", "Draw Odds": "3.80", "Away Odds": "4.00", "Score Tip": "3-1", "Goals Prediction": "Over 2.5", "Prediction Confidence": "High", "Match Result": "", "Home Form": "WWW", "Away Form": "DWW", "H2H Home Win": "6", "H2H Draws": "2", "H2H Away Win": "2", "Home Power": "92", "Away Power": "88", "Home Position": "1", "Away Position": "3", "Avg Home Scored": "2.8", "Avg Away Scored": "2.0", "Avg Home Conceded": "0.6", "Avg Away Conceded": "1.0" },
+             { "Match Date": "Wednesday 2nd September 2026", "Match Type": "League", "Competition": "Serie A", "Home Team": "Juventus", "Away Team": "AC Milan", "Home Odds": "2.30", "Draw Odds": "3.20", "Away Odds": "3.10", "Score Tip": "1-0", "Goals Prediction": "Under 2.5", "Prediction Confidence": "Low", "Match Result": "", "Home Form": "WDW", "Away Form": "WLD", "H2H Home Win": "4", "H2H Draws": "4", "H2H Away Win": "2", "Home Power": "84", "Away Power": "83", "Home Position": "3", "Away Position": "4", "Avg Home Scored": "1.5", "Avg Away Scored": "1.4", "Avg Home Conceded": "0.7", "Avg Away Conceded": "1.1" }
+        ];
+
         window.onload = function() {
             loadCSVData();
         };
@@ -468,26 +498,78 @@
             loading.classList.remove('hidden');
             errorBox.classList.add('hidden');
 
-            fetch(CSV_URL)
+            fetch(CSV_URL, { 
+                method: 'GET',
+                // Explicitly state we want CORS, though Google Sheets handles this on their end if published correctly
+                mode: 'cors' 
+            })
                 .then(response => {
-                    if (!response.ok) throw new Error("Network response was not ok");
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    // Check if the response is redirected to a non-CSV source (like a login page)
+                    if (response.redirected && response.url.includes("accounts.google.com")) {
+                        throw new Error("Redirected to Google Login. The Google Sheet is not publicly accessible.");
+                    }
                     return response.text();
                 })
                 .then(csvText => {
+                    // If we receive HTML instead of CSV, it's likely a login or error page
+                    if (csvText.trim().toLowerCase().startsWith("<!doctype html>") || csvText.trim().toLowerCase().startsWith("<html")) {
+                        throw new Error("Received HTML instead of CSV. Check your sharing permissions.");
+                    }
                     parseCSV(csvText);
-                    loading.classList.add('hidden');
-                    populateFilterDropdowns();
-                    applyFilters();
+                    finishLoading(false);
                 })
                 .catch(err => {
-                    console.error(err);
+                    console.error("Fetch Error:", err);
+                    
+                    let helpMessage = "Failed to download data from the provided URL.";
+                    if (err.message.includes("Failed to fetch") || err.message.includes("NetworkError") || err.name === 'TypeError') {
+                        helpMessage = "CORS or Network Error: Access blocked by browser security policies. This usually means the Google Sheet is not properly 'Published to the Web' or requires login.";
+                    } else if (err.message) {
+                        helpMessage = err.message;
+                    }
+                    
+                    // Show error state but also load mock data so the UI isn't empty
+                    document.getElementById('errorMessage').innerText = helpMessage;
                     loading.classList.add('hidden');
                     errorBox.classList.remove('hidden');
-                    document.getElementById('errorMessage').innerText = err.message || "Failed to download CSV data.";
+                    
+                    console.log("Loading fallback mock data...");
+                    loadMockData();
+                    finishLoading(true);
                 });
         }
 
-        // CSV Parser that handles quoted fields correctly
+        function finishLoading(isError) {
+             const loading = document.getElementById('loadingState');
+             if(!isError) {
+                 loading.classList.add('hidden');
+             }
+             populateFilterDropdowns();
+             
+             const matchTypeDropdown = document.getElementById('filterMatchType');
+             if (matchTypeDropdown && Array.from(matchTypeDropdown.options).some(opt => opt.value === 'High Probability')) {
+                 matchTypeDropdown.value = 'High Probability';
+             }
+             
+             applyFilters();
+             // Default to Matches tab to ensure UI refreshes correctly
+             switchTab('matches');
+        }
+        
+        function loadMockData() {
+            rawMatchData = mockData.map(row => {
+                let rowObj = {...row};
+                if (rowObj['Match Type']) {
+                    rowObj['Match Type'] = mapMatchType(rowObj['Match Type']);
+                }
+                rowObj.parsedDate = parseCustomDate(rowObj['Match Date']);
+                return rowObj;
+            });
+        }
+
         function parseCSV(text) {
             let lines = text.split("\n");
             if (lines.length === 0) return;
@@ -502,7 +584,11 @@
 
                 let rowObj = {};
                 for (let j = 0; j < headers.length; j++) {
-                    rowObj[headers[j]] = rowVals[j] ? rowVals[j].trim() : "";
+                    let val = rowVals[j] ? rowVals[j].trim() : "";
+                    if (headers[j] === 'Match Type') {
+                        val = mapMatchType(val);
+                    }
+                    rowObj[headers[j]] = val;
                 }
 
                 // Parse Date for filtering and comparison
@@ -593,7 +679,12 @@
         }
 
         function resetFilters() {
-            document.getElementById('filterMatchType').value = '';
+            const matchTypeDropdown = document.getElementById('filterMatchType');
+            if (matchTypeDropdown && Array.from(matchTypeDropdown.options).some(opt => opt.value === 'High Probability')) {
+                matchTypeDropdown.value = 'High Probability';
+            } else {
+                matchTypeDropdown.value = '';
+            }
             document.getElementById('filterCompetition').value = '';
             document.getElementById('filterGoals').value = '';
             document.getElementById('filterDate').value = '';
