@@ -6,7 +6,7 @@
     <title>Andean Explorer - Soccer Intelligence & Predictive Models</title>
     
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><style>@keyframes rot{100%{transform:rotate(360deg);}}</style><text y=%22.9em%22 font-size=%2280%22 style=%22transform-origin:50% 50%;animation:rot 6s linear infinite;%22>🧭</text></svg>">
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -78,6 +78,15 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Slow Spin for Compass */
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 8s linear infinite;
+        }
+
         /* Gold Gradient Text */
         .gold-gradient-text {
             background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #b45309 100%);
@@ -116,43 +125,56 @@
 
     <!-- Navigation Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex flex-col sm:flex-row items-center justify-between gap-3 py-2 sm:py-0">
             
-            <!-- Brand Logo -->
-            <div class="flex items-center space-x-3.5">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-700 via-teal-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-teal-900/10 animate-float border border-amber-300/40">
-                    <i class="fa-solid fa-compass text-2xl text-amber-200"></i>
+            <!-- Brand Logo & Controls -->
+            <div class="flex items-center justify-between w-full sm:w-auto">
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-teal-700 via-teal-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-teal-900/10 animate-float border border-amber-300/40">
+                        <i class="fa-solid fa-compass text-2xl text-amber-200 animate-spin-slow"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+                            <span>Andean Explorer</span>
+                            <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-xs">PRO</span>
+                        </h1>
+                        <p class="text-[11px] sm:text-xs font-medium text-teal-700 flex items-center gap-1.5">
+                            <i class="fa-solid fa-chart-line text-[10px] text-amber-500"></i>
+                            <span>Soccer Intelligence & Predictive Analytics</span>
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
-                        <span>Andean Explorer</span>
-                        <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-xs">PRO</span>
-                    </h1>
-                    <p class="text-xs font-medium text-teal-700 flex items-center gap-1.5">
-                        <i class="fa-solid fa-chart-line text-[10px] text-amber-500"></i>
-                        <span>Soccer Intelligence & Predictive Analytics</span>
-                    </p>
-                </div>
+
+                <button onclick="openSourceModal()" class="sm:hidden px-3 py-1.5 bg-slate-100 border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-200 transition flex items-center gap-1">
+                    <i class="fa-solid fa-link text-teal-700"></i> Data Source
+                </button>
             </div>
 
-            <!-- Tab Buttons -->
-            <div class="flex space-x-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 shadow-inner overflow-x-auto">
-                <button onclick="switchTab('matches')" id="btnTabMatches" class="px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 bg-teal-700 text-white shadow-sm flex items-center gap-2 whitespace-nowrap">
-                    <i class="fa-solid fa-futbol text-amber-400"></i>
-                    <span>Matches</span>
+            <!-- Header Right Action & Tab Navigation -->
+            <div class="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-end overflow-x-auto">
+                <button onclick="openSourceModal()" class="hidden sm:flex px-3 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-xs font-bold transition items-center gap-1.5 shadow-xs whitespace-nowrap">
+                    <i class="fa-solid fa-link text-teal-700"></i> Change Data Source
                 </button>
-                <button onclick="switchTab('analytics')" id="btnTabAnalytics" class="px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 hover:text-teal-700 flex items-center gap-2 whitespace-nowrap">
-                    <i class="fa-solid fa-chart-pie text-slate-400"></i>
-                    <span>Analytics</span>
-                </button>
-                <button onclick="switchTab('roi')" id="btnTabRoi" class="px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 hover:text-teal-700 flex items-center gap-2 whitespace-nowrap">
-                    <i class="fa-solid fa-coins text-amber-500"></i>
-                    <span>ROI & Profit</span>
-                </button>
-                <button onclick="switchTab('best-tips')" id="btnTabBestTips" class="px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 hover:text-teal-700 flex items-center gap-2 whitespace-nowrap">
-                    <i class="fa-solid fa-star text-amber-500"></i>
-                    <span>Best Tips (>70%)</span>
-                </button>
+
+                <!-- Tab Buttons -->
+                <div class="flex space-x-1 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 shadow-inner overflow-x-auto w-full sm:w-auto">
+                    <button onclick="switchTab('matches')" id="btnTabMatches" class="px-3.5 sm:px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 bg-teal-700 text-white shadow-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-futbol text-amber-400"></i>
+                        <span>Matches</span>
+                    </button>
+                    <button onclick="switchTab('analytics')" id="btnTabAnalytics" class="px-3.5 sm:px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 hover:text-teal-700 flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-chart-pie text-slate-400"></i>
+                        <span>Analytics</span>
+                    </button>
+                    <button onclick="switchTab('roi')" id="btnTabRoi" class="px-3.5 sm:px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 hover:text-teal-700 flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-coins text-amber-500"></i>
+                        <span>ROI & Profit</span>
+                    </button>
+                    <button onclick="switchTab('best-tips')" id="btnTabBestTips" class="px-3.5 sm:px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 hover:text-teal-700 flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-star text-amber-500"></i>
+                        <span>Best Tips (>70%)</span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -160,33 +182,54 @@
     <!-- Main Content Shell -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 overflow-y-auto">
 
+        <!-- Status / Sync Banner -->
+        <div id="syncBanner" class="mb-5 px-4 py-2.5 rounded-2xl bg-teal-50 border border-teal-200 text-teal-900 text-xs font-semibold flex items-center justify-between shadow-2xs">
+            <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                <span>Data Feed Connected: <strong id="currentSourceLabel" class="font-mono text-teal-800">Google Sheet CSV Feed</strong></span>
+            </div>
+            <button onclick="loadCSVData()" class="hover:underline text-teal-700 font-bold flex items-center gap-1">
+                <i class="fa-solid fa-rotate text-[10px]"></i> Refresh Feed
+            </button>
+        </div>
+
         <!-- Loading Spinner State -->
-        <div id="loadingState" class="flex flex-col items-center justify-center py-28 space-y-4">
+        <div id="loadingState" class="flex flex-col items-center justify-center py-20 space-y-4">
             <div class="spinner"></div>
             <div class="text-center">
                 <p class="text-slate-800 font-bold text-base">Syncing Live Match Intelligence...</p>
-                <p class="text-slate-400 text-xs mt-1">Connecting to Google Sheet CSV published endpoint</p>
+                <p class="text-slate-400 text-xs mt-1">Connecting to Google Sheet published CSV endpoint...</p>
             </div>
         </div>
 
-        <!-- Error / Offline Connection Warning State -->
+        <!-- Error State -->
         <div id="errorState" class="hidden bg-red-50 border-2 border-red-200 text-red-900 p-6 rounded-3xl text-center max-w-2xl mx-auto my-8 shadow-lg">
             <div class="w-12 h-12 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
             <h3 class="text-base font-bold">Failed to load direct sheet feed</h3>
             <p id="errorMessage" class="text-xs text-red-700 mt-1 font-medium"></p>
-            <div class="mt-4 text-xs text-left text-slate-700 bg-white p-4 rounded-2xl border border-red-200 space-y-1.5 shadow-sm">
-                <strong class="block text-red-700 font-bold mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Quick Google Sheets Setup Check:</strong>
+            
+            <div class="mt-4 text-xs text-left text-slate-700 bg-white p-4 rounded-2xl border border-red-200 space-y-2 shadow-sm">
+                <strong class="block text-red-700 font-bold"><i class="fa-solid fa-circle-info mr-1"></i> Quick Google Sheets Setup Check:</strong>
                 <ol class="list-decimal pl-4 space-y-1 text-slate-600">
                     <li>Open Google Sheet &rarr; Click <strong>Share</strong> &rarr; Set to <em>"Anyone with link"</em>.</li>
                     <li>Go to <strong>File &rarr; Share &rarr; Publish to Web</strong>.</li>
                     <li>Select sheet & set output to <strong>Comma-separated values (.csv)</strong>.</li>
                 </ol>
             </div>
-            <button onclick="loadCSVData()" class="mt-5 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-xs transition shadow-md shadow-red-600/20 inline-flex items-center gap-2">
-                <i class="fa-solid fa-rotate-right"></i> Retry Connection
-            </button>
+
+            <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+                <button onclick="loadCSVData()" class="px-5 py-2.5 bg-teal-700 hover:bg-teal-800 text-white rounded-xl font-bold text-xs transition shadow-md inline-flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> Retry Sync
+                </button>
+                <button onclick="useFallbackSampleData()" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-xl font-bold text-xs transition shadow-md inline-flex items-center gap-2">
+                    <i class="fa-solid fa-database"></i> Load Embedded Dataset
+                </button>
+                <button onclick="openSourceModal()" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl font-bold text-xs transition inline-flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit CSV Link / Upload
+                </button>
+            </div>
         </div>
 
         <!-- TAB 1: MATCHES CONTENT -->
@@ -196,7 +239,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <!-- Total Matches Card -->
                 <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition flex items-center space-x-4 border-l-4 border-l-teal-600">
-                    <div class="w-13 h-13 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center text-2xl font-bold border border-teal-100">
+                    <div class="w-13 h-13 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center text-2xl font-bold border border-teal-100 p-3">
                         <i class="fa-solid fa-layer-group"></i>
                     </div>
                     <div>
@@ -207,7 +250,7 @@
 
                 <!-- Total Won Card -->
                 <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition flex items-center space-x-4 border-l-4 border-l-emerald-500">
-                    <div class="w-13 h-13 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold border border-emerald-100">
+                    <div class="w-13 h-13 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold border border-emerald-100 p-3">
                         <i class="fa-solid fa-trophy"></i>
                     </div>
                     <div>
@@ -218,7 +261,7 @@
 
                 <!-- Win Rate Card (Gold Accent) -->
                 <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition flex items-center space-x-4 border-l-4 border-l-amber-500 gold-border-glow">
-                    <div class="w-13 h-13 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold border border-amber-200">
+                    <div class="w-13 h-13 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold border border-amber-200 p-3">
                         <i class="fa-solid fa-bullseye"></i>
                     </div>
                     <div>
@@ -231,9 +274,9 @@
                 </div>
             </div>
 
-            <!-- Filter Controls Bar (Includes NEW Score Tip Dropdown) -->
+            <!-- Filter Controls Bar -->
             <div class="bg-white border border-slate-200/90 p-5 rounded-3xl shadow-sm relative overflow-hidden">
-                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 pb-3 border-b border-slate-100 gap-2">
                     <div class="flex items-center space-x-2">
                         <div class="w-8 h-8 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold text-sm">
                             <i class="fa-solid fa-sliders"></i>
@@ -242,52 +285,69 @@
                             Match Intelligence Filters
                         </h2>
                     </div>
-                    <button onclick="resetFilters()" class="text-xs font-bold text-slate-500 hover:text-red-600 transition flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50">
-                        <i class="fa-solid fa-rotate-left"></i> Reset Filters
-                    </button>
+
+                    <!-- Quick Date Shortcuts -->
+                    <div class="flex items-center space-x-1.5 flex-wrap gap-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase mr-1">Date Quick Select:</span>
+                        <button onclick="setDateFilterPreset('all')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">All Dates</button>
+                        <button onclick="setDateFilterPreset('today')" class="px-2.5 py-1 bg-teal-50 hover:bg-teal-100 text-teal-800 rounded-lg text-xs font-bold transition">Today</button>
+                        <button onclick="setDateFilterPreset('recent')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg text-xs font-bold transition">Last 7 Days</button>
+                        <button onclick="resetFilters()" class="text-xs font-bold text-slate-500 hover:text-red-600 transition flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-red-50 ml-2">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
                 </div>
 
-                <!-- 5 Filter Inputs Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <!-- 1. Match Type -->
+                <!-- Filter Inputs Grid & Team Search -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3.5">
+                    <!-- 1. Search Team -->
+                    <div>
+                        <label class="block text-[11px] font-extrabold text-slate-500 mb-1.5 uppercase tracking-wider">Search Team</label>
+                        <div class="relative">
+                            <input type="text" id="filterSearch" oninput="applyFilters()" placeholder="Team name..." class="w-full bg-slate-50 border border-slate-300 focus:bg-white text-slate-800 text-xs font-semibold rounded-xl pl-8 pr-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500 transition">
+                            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-slate-400 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <!-- 2. Match Type -->
                     <div>
                         <label class="block text-[11px] font-extrabold text-slate-500 mb-1.5 uppercase tracking-wider">Match Type</label>
-                        <select id="filterMatchType" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 focus:bg-white text-slate-800 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition shadow-xs">
+                        <select id="filterMatchType" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 focus:bg-white text-slate-800 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-xs">
                             <option value="">All Match Types</option>
                         </select>
                     </div>
 
-                    <!-- 2. Competition -->
+                    <!-- 3. Competition -->
                     <div>
                         <label class="block text-[11px] font-extrabold text-slate-500 mb-1.5 uppercase tracking-wider">Competition</label>
-                        <select id="filterCompetition" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 focus:bg-white text-slate-800 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition shadow-xs">
+                        <select id="filterCompetition" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 focus:bg-white text-slate-800 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-xs">
                             <option value="">All Competitions</option>
                         </select>
                     </div>
 
-                    <!-- 3. NEW: Score Tip (Dynamic Dropdown from Google Sheet) -->
+                    <!-- 4. Score Tip -->
                     <div>
                         <label class="block text-[11px] font-extrabold text-amber-600 mb-1.5 uppercase tracking-wider flex items-center justify-between">
                             <span>Score Tip</span>
                             <span class="text-[9px] bg-amber-100 text-amber-800 px-1.5 rounded font-extrabold">DYNAMIC</span>
                         </label>
-                        <select id="filterScoreTip" onchange="applyFilters()" class="w-full bg-amber-50/40 border border-amber-300 focus:bg-white text-slate-800 text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition shadow-xs">
+                        <select id="filterScoreTip" onchange="applyFilters()" class="w-full bg-amber-50/40 border border-amber-300 focus:bg-white text-slate-800 text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500 transition shadow-xs">
                             <option value="">All Score Tips</option>
                         </select>
                     </div>
 
-                    <!-- 4. Goals Prediction -->
+                    <!-- 5. Goals Prediction -->
                     <div>
                         <label class="block text-[11px] font-extrabold text-slate-500 mb-1.5 uppercase tracking-wider">Goals Prediction</label>
-                        <select id="filterGoals" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 focus:bg-white text-slate-800 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition shadow-xs">
+                        <select id="filterGoals" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 focus:bg-white text-slate-800 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-xs">
                             <option value="">All Goals Predictions</option>
                         </select>
                     </div>
 
-                    <!-- 5. Date Filter -->
+                    <!-- 6. Match Date -->
                     <div>
                         <label class="block text-[11px] font-extrabold text-slate-500 mb-1.5 uppercase tracking-wider">Match Date</label>
-                        <input type="date" id="filterDate" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 focus:bg-white text-slate-800 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition shadow-xs">
+                        <input type="date" id="filterDate" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 focus:bg-white text-slate-800 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-xs">
                     </div>
                 </div>
             </div>
@@ -330,7 +390,7 @@
                 </div>
 
                 <!-- Table Footer & Pagination Controls -->
-                <div class="px-6 py-4 bg-slate-50/80 border-t border-slate-200/80 flex items-center justify-between">
+                <div class="px-6 py-4 bg-slate-50/80 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-3">
                     <span id="paginationInfo" class="text-xs font-semibold text-slate-500">Page 1 of 1</span>
                     <div class="flex space-x-2">
                         <button onclick="changePage(-1)" id="prevPageBtn" class="px-4 py-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition shadow-xs disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1">
@@ -355,7 +415,7 @@
                             <i class="fa-solid fa-chart-line"></i>
                         </div>
                         <h2 class="text-sm font-bold text-slate-800 uppercase tracking-wide">
-                            Model Analytics & Filtering (5-Day Rolling Window)
+                            Model Analytics & Performance Breakdown
                         </h2>
                     </div>
                     <button onclick="resetAnalyticsFilters()" class="text-xs font-bold text-slate-500 hover:text-red-600 transition flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50">
@@ -398,7 +458,7 @@
             <!-- Analytics Overview KPI Row -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center space-x-4 border-l-4 border-l-teal-600">
-                    <div class="w-13 h-13 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center text-2xl font-bold border border-teal-100">
+                    <div class="w-13 h-13 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center text-2xl font-bold border border-teal-100 p-3">
                         <i class="fa-solid fa-clipboard-check"></i>
                     </div>
                     <div>
@@ -408,7 +468,7 @@
                 </div>
 
                 <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center space-x-4 border-l-4 border-l-sky-500">
-                    <div class="w-13 h-13 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-2xl font-bold border border-sky-100">
+                    <div class="w-13 h-13 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-2xl font-bold border border-sky-100 p-3">
                         <i class="fa-solid fa-square-poll-vertical"></i>
                     </div>
                     <div>
@@ -418,7 +478,7 @@
                 </div>
 
                 <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center space-x-4 border-l-4 border-l-amber-500 gold-border-glow">
-                    <div class="w-13 h-13 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold border border-amber-200">
+                    <div class="w-13 h-13 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold border border-amber-200 p-3">
                         <i class="fa-solid fa-award"></i>
                     </div>
                     <div>
@@ -433,7 +493,7 @@
                 <!-- Dynamically injected model performance tables -->
             </div>
 
-            <!-- New Score Tip Performance Summary Table -->
+            <!-- Score Tip Performance Summary Table -->
             <div class="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-sm space-y-4 mt-6">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
                     <div class="flex items-center space-x-3">
@@ -471,18 +531,24 @@
         <div id="roiTab" class="space-y-6 hidden">
             <!-- ROI Filter Bar -->
             <div class="bg-white border border-slate-200/90 p-5 rounded-3xl shadow-sm">
-                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 pb-3 border-b border-slate-100 gap-2">
                     <div class="flex items-center space-x-2">
                         <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">
                             <i class="fa-solid fa-coins"></i>
                         </div>
                         <h2 class="text-sm font-bold text-slate-800 uppercase tracking-wide">
-                            Return on Investment (ROI) & Profit Analysis <span class="text-xs text-amber-600 font-normal">(Unit Stake: 100)</span>
+                            Return on Investment (ROI) & Financial Models
                         </h2>
                     </div>
-                    <button onclick="resetRoiFilters()" class="text-xs font-bold text-slate-500 hover:text-red-600 transition flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50">
-                        <i class="fa-solid fa-rotate-left"></i> Reset Filters
-                    </button>
+
+                    <!-- Stake Unit Selector -->
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs font-bold text-slate-500 uppercase">Unit Stake:</span>
+                        <input type="number" id="roiUnitStake" value="100" min="1" onchange="renderRoiAnalytics()" class="w-24 bg-slate-50 border border-slate-300 font-mono font-bold text-slate-900 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <button onclick="resetRoiFilters()" class="text-xs font-bold text-slate-500 hover:text-red-600 transition flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -521,7 +587,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 <!-- Staked -->
                 <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center space-x-4 border-l-4 border-l-teal-600">
-                    <div class="w-13 h-13 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center text-2xl font-bold border border-teal-100">
+                    <div class="w-13 h-13 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center text-2xl font-bold border border-teal-100 p-3">
                         <i class="fa-solid fa-calculator"></i>
                     </div>
                     <div>
@@ -532,7 +598,7 @@
 
                 <!-- Returns -->
                 <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center space-x-4 border-l-4 border-l-sky-500">
-                    <div class="w-13 h-13 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-2xl font-bold border border-sky-100">
+                    <div class="w-13 h-13 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-2xl font-bold border border-sky-100 p-3">
                         <i class="fa-solid fa-wallet"></i>
                     </div>
                     <div>
@@ -543,7 +609,7 @@
 
                 <!-- Net Profit/Loss -->
                 <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center space-x-4 border-l-4 border-l-emerald-500">
-                    <div class="w-13 h-13 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold border border-emerald-100">
+                    <div class="w-13 h-13 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold border border-emerald-100 p-3">
                         <i class="fa-solid fa-chart-line"></i>
                     </div>
                     <div>
@@ -554,7 +620,7 @@
 
                 <!-- Overall ROI % -->
                 <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center space-x-4 border-l-4 border-l-amber-500 gold-border-glow">
-                    <div class="w-13 h-13 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold border border-amber-200">
+                    <div class="w-13 h-13 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold border border-amber-200 p-3">
                         <i class="fa-solid fa-percent"></i>
                     </div>
                     <div>
@@ -570,7 +636,6 @@
             </div>
         </div>
 
-        <!-- STREAMING_CHUNK:Adding Best Tips (>70% Win Rate) Tab markup... -->
         <!-- TAB 4: BEST TIPS (>70% WIN RATE) CONTENT -->
         <div id="bestTipsTab" class="space-y-6 hidden">
             <!-- Best Tips Filter & Info Header Bar -->
@@ -669,6 +734,40 @@
         </div>
     </div>
 
+    <!-- Data Source Manager Modal -->
+    <div id="sourceModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-md hidden p-4 transition-all duration-300">
+        <div class="bg-white border border-slate-200 w-full max-w-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-database text-amber-400 text-lg"></i>
+                    <h3 class="font-bold text-sm">Data Source Manager</h3>
+                </div>
+                <button onclick="closeSourceModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Google Sheet CSV Published URL</label>
+                    <input type="text" id="customCsvUrl" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    <p class="text-[10px] text-slate-500 mt-1">Make sure the link ends with <code class="bg-slate-100 px-1 rounded">&output=csv</code></p>
+                </div>
+
+                <div class="border-t border-slate-200 pt-4">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Upload Local CSV File</label>
+                    <input type="file" id="fileCsvInput" accept=".csv" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
+                </div>
+
+                <div class="border-t border-slate-200 pt-4">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Or Paste Raw CSV Data</label>
+                    <textarea id="rawCsvPasteArea" rows="4" placeholder="Match Date,Competition,Home Team,Away Team,Home Odds,Draw Odds,Away Odds,Score Tip,Prediction Confidence,Match Result..." class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                </div>
+            </div>
+            <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end space-x-2">
+                <button onclick="closeSourceModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl text-xs font-bold">Cancel</button>
+                <button onclick="applyNewDataSource()" class="px-5 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs font-bold shadow-sm">Save & Sync</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200/80 py-5 text-center text-xs text-slate-500 font-medium mt-auto">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
@@ -682,12 +781,23 @@
 
     <!-- Application Logic Script -->
     <script>
-        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdBYhj6V1eF7PoiOY2vQkXSTKYzvMlysukYQt05roAsuDEj6KsAXO_0tDOZHRYXhnxJqDLIEMoFoVA/pub?gid=0&single=true&output=csv";
+        let CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdBYhj6V1eF7PoiOY2vQkXSTKYzvMlysukYQt05roAsuDEj6KsAXO_0tDOZHRYXhnxJqDLIEMoFoVA/pub?gid=0&single=true&output=csv";
         
         let rawMatchData = [];
         let filteredMatchData = [];
         let currentPage = 1;
         const pageSize = 25;
+
+        // Sample Backup Dataset (Ensures immediate preview functionality if offline or CORS blocked)
+        const SAMPLE_CSV_DATA = `Match Date,Match Type,Competition,Home Team,Away Team,Home Odds,Draw Odds,Away Odds,Score Tip,Prediction Confidence,Match Result,Goals Prediction
+Saturday 26th Sep 2026,High Probability,Premier League,Arsenal,Chelsea,1.85,3.60,4.20,2-1,84%,2-1,Over 2.5
+Saturday 26th Sep 2026,High Probability,La Liga,Real Madrid,FC Barcelona,2.10,3.40,3.20,2-1,78%,3-1,Over 2.5
+Friday 25th Sep 2026,Super Trend,Bundesliga,Bayern Munich,Dortmund,1.55,4.50,5.20,3-1,88%,3-1,Over 3.5
+Friday 25th Sep 2026,High Probability,Serie A,Inter Milan,AC Milan,2.00,3.30,3.50,1-0,72%,1-0,Under 2.5
+Thursday 24th Sep 2026,Value Angle,Ligue 1,PSG,Marseille,1.45,4.80,6.00,2-0,81%,2-0,Over 1.5
+Wednesday 23rd Sep 2026,High Probability,Premier League,Liverpool,Manchester City,2.40,3.50,2.80,2-2,75%,2-2,Over 2.5
+Tuesday 22nd Sep 2026,Super Trend,La Liga,Atletico Madrid,Sevilla,1.75,3.50,4.80,1-0,82%,1-0,Under 2.5
+Monday 21st Sep 2026,High Probability,Serie A,Juventus,Roma,1.90,3.40,4.00,2-1,79%,2-1,Over 2.5`;
 
         function switchTab(tabName) {
             const matchesTab = document.getElementById('matchesTab');
@@ -705,13 +815,13 @@
             roiTab.classList.add('hidden');
             bestTipsTab.classList.add('hidden');
 
-            const inactiveClass = "px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 hover:text-teal-700 flex items-center gap-2 whitespace-nowrap";
+            const inactiveClass = "px-3.5 sm:px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 hover:text-teal-700 flex items-center gap-2 whitespace-nowrap";
             btnMatches.className = inactiveClass;
             btnAnalytics.className = inactiveClass;
             btnRoi.className = inactiveClass;
             btnBestTips.className = inactiveClass;
 
-            const activeClass = "px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 bg-teal-700 text-white shadow-sm flex items-center gap-2 whitespace-nowrap";
+            const activeClass = "px-3.5 sm:px-5 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 bg-teal-700 text-white shadow-sm flex items-center gap-2 whitespace-nowrap";
 
             if (tabName === 'matches') {
                 matchesTab.classList.remove('hidden');
@@ -730,6 +840,40 @@
                 btnBestTips.className = activeClass;
                 renderBestTipsTab();
             }
+        }
+
+        function parseCSVText(csvText) {
+            let lines = [];
+            let curLine = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < csvText.length; i++) {
+                let char = csvText[i];
+                let nextChar = csvText[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        curLine += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if ((char === '\r' || char === '\n') && !inQuotes) {
+                    if (char === '\r' && nextChar === '\n') {
+                        i++;
+                    }
+                    if (curLine.trim().length > 0) {
+                        lines.push(curLine);
+                    }
+                    curLine = '';
+                } else {
+                    curLine += char;
+                }
+            }
+            if (curLine.trim().length > 0) {
+                lines.push(curLine);
+            }
+            return lines;
         }
 
         function parseCSVRow(rowStr) {
@@ -751,11 +895,52 @@
             return result.map(v => v.replace(/^["']|["']$/g, "").trim());
         }
 
+        // Header Normalizer to ensure varying column names from Google Sheets map correctly
+        function normalizeHeaderKey(header) {
+            if (!header) return header;
+            const clean = header.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (clean.includes('date')) return 'Match Date';
+            if (clean.includes('comp') || clean.includes('league') || clean.includes('tournament')) return 'Competition';
+            if (clean.includes('hometeam') || clean === 'home') return 'Home Team';
+            if (clean.includes('awayteam') || clean === 'away') return 'Away Team';
+            if (clean.includes('homeodd') || clean === 'homeodds' || clean === 'odd1' || clean === '1') return 'Home Odds';
+            if (clean.includes('drawodd') || clean === 'drawodds' || clean === 'oddx' || clean === 'x') return 'Draw Odds';
+            if (clean.includes('awayodd') || clean === 'awayodds' || clean === 'odd2' || clean === '2') return 'Away Odds';
+            if (clean.includes('scoretip') || clean.includes('tip') || clean.includes('prediction') || clean.includes('exactscore')) return 'Score Tip';
+            if (clean.includes('confid') || clean.includes('prob')) return 'Prediction Confidence';
+            if (clean.includes('result') || clean === 'ft' || clean === 'score') return 'Match Result';
+            if (clean.includes('matchtype') || clean.includes('category') || clean === 'type') return 'Match Type';
+            if (clean.includes('goals') || clean.includes('overunder')) return 'Goals Prediction';
+            return header;
+        }
+
         function parseCustomDate(dateStr) {
-            if (!dateStr) return null;
-            let cleaned = dateStr.replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s*/i, "");
-            cleaned = cleaned.replace(/(\d+)(st|nd|rd|th)/gi, "$1");
-            let parsed = new Date(cleaned);
+            if (!dateStr || typeof dateStr !== 'string') return null;
+            let s = dateStr.trim();
+            if (!s) return null;
+
+            s = s.replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thu|Fri|Sat|Sun)[,\s]+/i, '');
+            s = s.replace(/(\d+)(st|nd|rd|th)/gi, '$1');
+
+            let isoMatch = s.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/);
+            if (isoMatch) {
+                let y = parseInt(isoMatch[1], 10);
+                let m = parseInt(isoMatch[2], 10) - 1;
+                let d = parseInt(isoMatch[3], 10);
+                let dt = new Date(y, m, d);
+                if (!isNaN(dt.getTime())) return dt;
+            }
+
+            let dmyMatch = s.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})/);
+            if (dmyMatch) {
+                let d = parseInt(dmyMatch[1], 10);
+                let m = parseInt(dmyMatch[2], 10) - 1;
+                let y = parseInt(dmyMatch[3], 10);
+                let dt = new Date(y, m, d);
+                if (!isNaN(dt.getTime())) return dt;
+            }
+
+            let parsed = new Date(s);
             return isNaN(parsed.getTime()) ? null : parsed;
         }
 
@@ -780,19 +965,16 @@
                 if (row['Score Tip'] && row['Score Tip'].trim() !== '') scoreTips.add(row['Score Tip'].trim());
             });
 
-            // Populate Matches Tab filters (Including NEW Score Tip filter)
             fillSelect('filterMatchType', matchTypes);
             fillSelect('filterCompetition', competitions);
             fillSelect('filterGoals', goalsPreds);
             fillSelect('filterScoreTip', scoreTips);
 
-            // Populate Analytics Tab filters
             fillSelect('analFilterMatchType', matchTypes);
             fillSelect('analFilterCompetition', competitions);
             fillSelect('analFilterGoals', goalsPreds);
             fillSelect('analFilterScoreTip', scoreTips);
 
-            // Populate ROI Tab filters
             fillSelect('roiFilterMatchType', matchTypes);
             fillSelect('roiFilterCompetition', competitions);
             fillSelect('roiFilterGoals', goalsPreds);
@@ -814,13 +996,21 @@
             });
         }
 
-        function resetFilters() {
-            const matchTypeDropdown = document.getElementById('filterMatchType');
-            if (matchTypeDropdown && Array.from(matchTypeDropdown.options).some(opt => opt.value === 'High Probability')) {
-                matchTypeDropdown.value = 'High Probability';
-            } else {
-                matchTypeDropdown.value = '';
+        function setDateFilterPreset(preset) {
+            const dateInput = document.getElementById('filterDate');
+            if (preset === 'all') {
+                dateInput.value = '';
+            } else if (preset === 'today') {
+                dateInput.value = formatDateToISO(new Date());
+            } else if (preset === 'recent') {
+                dateInput.value = ''; // clears specific date filter
             }
+            applyFilters();
+        }
+
+        function resetFilters() {
+            if (document.getElementById('filterSearch')) document.getElementById('filterSearch').value = '';
+            document.getElementById('filterMatchType').value = '';
             document.getElementById('filterCompetition').value = '';
             document.getElementById('filterScoreTip').value = '';
             document.getElementById('filterGoals').value = '';
@@ -847,6 +1037,7 @@
         }
 
         function applyFilters() {
+            const searchF = document.getElementById('filterSearch') ? document.getElementById('filterSearch').value.toLowerCase().trim() : '';
             const matchTypeF = document.getElementById('filterMatchType').value;
             const competitionF = document.getElementById('filterCompetition').value;
             const scoreTipF = document.getElementById('filterScoreTip') ? document.getElementById('filterScoreTip').value : '';
@@ -854,6 +1045,11 @@
             const dateF = document.getElementById('filterDate').value;
 
             filteredMatchData = rawMatchData.filter(row => {
+                if (searchF) {
+                    const home = (row['Home Team'] || '').toLowerCase();
+                    const away = (row['Away Team'] || '').toLowerCase();
+                    if (!home.includes(searchF) && !away.includes(searchF)) return false;
+                }
                 if (matchTypeF && row['Match Type'] !== matchTypeF) return false;
                 if (competitionF && row['Competition'] !== competitionF) return false;
                 if (scoreTipF && row['Score Tip'] !== scoreTipF) return false;
@@ -896,9 +1092,8 @@
             renderTable();
         }
 
-        // Logic to evaluate if a score tip won (directional match or exact score)
         function evaluateTipCorrectness(tip, result) {
-            if (!tip || !result || result.trim() === '') return null;
+            if (!tip || !result || result.trim() === '' || result.toLowerCase().includes('upcoming')) return null;
 
             let tipParts = tip.replace(/\s+/g, '').toLowerCase().split(/[-:]/);
             let resParts = result.replace(/\s+/g, '').toLowerCase().split(/[-:]/);
@@ -982,86 +1177,6 @@
             });
         }
 
-        function openMatchModal(dataIndex) {
-            let row = filteredMatchData[dataIndex];
-            if (!row) return;
-
-            document.getElementById('modalMatchTitle').innerText = `${row['Home Team']} vs ${row['Away Team']}`;
-            document.getElementById('modalMatchSubtitle').innerText = `${row['Competition'] || 'Match'} • ${row['Match Date'] || ''}`;
-
-            let urlLink = document.getElementById('modalMatchUrlLink');
-            if (row['Match URL']) {
-                urlLink.href = row['Match URL'];
-                urlLink.classList.remove('hidden');
-            } else {
-                urlLink.classList.add('hidden');
-            }
-
-            let isWon = evaluateTipCorrectness(row['Score Tip'], row['Match Result']);
-            let resultBadge = row['Match Result'] || 'Upcoming';
-            if (isWon === true) resultBadge += ' (Won ✅)';
-            else if (isWon === false) resultBadge += ' (Lost ❌)';
-
-            const content = document.getElementById('modalBodyContent');
-            content.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-teal-800 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-line text-amber-500"></i> Form & Confidence
-                        </h4>
-                        <div class="space-y-2 text-xs">
-                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">Home Form:</span> <strong class="text-slate-900 font-bold">${row['Home Form'] || '-'}</strong></div>
-                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">Away Form:</span> <strong class="text-slate-900 font-bold">${row['Away Form'] || '-'}</strong></div>
-                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">Confidence Level:</span> <strong class="text-teal-700 font-mono font-bold">${row['Prediction Confidence'] || '-'}</strong></div>
-                            <div class="flex justify-between"><span class="text-slate-500 font-medium">Goals Prediction:</span> <strong class="text-slate-900 font-mono font-bold">${row['Goals Prediction'] || '-'}</strong></div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-teal-800 flex items-center gap-2">
-                            <i class="fa-solid fa-handshake-simple text-amber-500"></i> Head-to-Head & Standings
-                        </h4>
-                        <div class="space-y-2 text-xs">
-                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">H2H (Home/Draw/Away):</span> <strong class="text-slate-900 font-mono font-bold">${row['H2H Home Win'] || '0'} - ${row['H2H Draws'] || '0'} - ${row['H2H Away Win'] || '0'}</strong></div>
-                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">Team Power Rating:</span> <strong class="text-slate-900 font-mono font-bold">${row['Home Power'] || '-'} vs ${row['Away Power'] || '-'}</strong></div>
-                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">League Position:</span> <strong class="text-slate-900 font-mono font-bold">#${row['Home Position'] || '-'} vs #${row['Away Position'] || '-'}</strong></div>
-                            <div class="flex justify-between"><span class="text-slate-500 font-medium">Match Result:</span> <strong class="text-teal-700 font-mono font-extrabold">${resultBadge}</strong></div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs md:col-span-2 space-y-3">
-                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-teal-800 flex items-center gap-2">
-                            <i class="fa-solid fa-futbol text-amber-500"></i> Scoring Averages
-                        </h4>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
-                                <span class="text-slate-400 block text-[10px] uppercase font-bold">Home Scored</span>
-                                <strong class="text-slate-900 font-mono text-sm">${row['Avg Home Scored'] || '-'}</strong>
-                            </div>
-                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
-                                <span class="text-slate-400 block text-[10px] uppercase font-bold">Away Scored</span>
-                                <strong class="text-slate-900 font-mono text-sm">${row['Avg Away Scored'] || '-'}</strong>
-                            </div>
-                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
-                                <span class="text-slate-400 block text-[10px] uppercase font-bold">Home Conceded</span>
-                                <strong class="text-slate-900 font-mono text-sm">${row['Avg Home Conceded'] || '-'}</strong>
-                            </div>
-                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
-                                <span class="text-slate-400 block text-[10px] uppercase font-bold">Away Conceded</span>
-                                <strong class="text-slate-900 font-mono text-sm">${row['Avg Away Conceded'] || '-'}</strong>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('matchDetailModal').classList.remove('hidden');
-        }
-
-        function closeMatchModal() {
-            document.getElementById('matchDetailModal').classList.add('hidden');
-        }
-
         function renderAnalytics() {
             const matchTypeF = document.getElementById('analFilterMatchType').value;
             const competitionF = document.getElementById('analFilterCompetition').value;
@@ -1069,15 +1184,11 @@
             const scoreTipF = document.getElementById('analFilterScoreTip').value;
             const goalsF = document.getElementById('analFilterGoals').value;
 
-            let today = new Date();
-            let fiveDaysAgo = new Date(today);
-            fiveDaysAgo.setDate(today.getDate() - 5);
-
             let matchTypesMap = {};
             let scoreTipsStatsMap = {};
 
             rawMatchData.forEach(r => {
-                let mt = r['Match Type'] || 'Uncategorized';
+                let mt = r['Match Type'] || 'General';
                 if (!matchTypesMap[mt]) matchTypesMap[mt] = [];
                 matchTypesMap[mt].push(r);
             });
@@ -1090,7 +1201,7 @@
             let totalWinsGlobal = 0;
 
             if (modelKeys.length === 0) {
-                container.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center text-slate-400 border border-slate-200">No match models found in raw data.</div>`;
+                container.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center text-slate-400 border border-slate-200">No match models found.</div>`;
             } else {
                 modelKeys.forEach(modelName => {
                     let rowsForModel = matchTypesMap[modelName];
@@ -1102,8 +1213,6 @@
                         if (goalsF && row['Goals Prediction'] !== goalsF) return false;
                         if (dateF && row.parsedDate) {
                             if (formatDateToISO(row.parsedDate) !== dateF) return false;
-                        } else if (!dateF && row.parsedDate) {
-                            if (row.parsedDate < fiveDaysAgo) return false;
                         }
                         return true;
                     });
@@ -1202,7 +1311,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-200 text-xs">
-                                    ${tableRowsHtml || '<tr><td colspan="5" class="text-center py-6 text-slate-400 font-medium">No matches found for this category with selected filters.</td></tr>'}
+                                    ${tableRowsHtml || '<tr><td colspan="5" class="text-center py-6 text-slate-400 font-medium">No matches found for this category.</td></tr>'}
                                 </tbody>
                             </table>
                         </div>
@@ -1215,7 +1324,6 @@
             document.getElementById('statTotalModels').innerText = modelKeys.length;
             document.getElementById('statOverallWinRate').innerText = (totalEvaluatedGlobal > 0 ? ((totalWinsGlobal / totalEvaluatedGlobal) * 100).toFixed(1) : '0.0') + '%';
 
-            // Populate the new Score Tip Performance Summary Table
             renderScoreTipPerformanceTable(scoreTipsStatsMap);
         }
 
@@ -1261,12 +1369,117 @@
             });
         }
 
+        function renderRoiAnalytics() {
+            const unitStake = parseFloat(document.getElementById('roiUnitStake').value) || 100;
+
+            const matchTypeF = document.getElementById('roiFilterMatchType').value;
+            const competitionF = document.getElementById('roiFilterCompetition').value;
+            const dateF = document.getElementById('roiFilterDate').value;
+            const scoreTipF = document.getElementById('roiFilterScoreTip').value;
+            const goalsF = document.getElementById('roiFilterGoals').value;
+
+            let totalStakedGlobal = 0;
+            let totalReturnsGlobal = 0;
+            let evaluatedCountGlobal = 0;
+
+            let typeFinancials = {};
+
+            rawMatchData.forEach(m => {
+                if (matchTypeF && m['Match Type'] !== matchTypeF) return;
+                if (competitionF && m['Competition'] !== competitionF) return;
+                if (scoreTipF && m['Score Tip'] !== scoreTipF) return;
+                if (goalsF && m['Goals Prediction'] !== goalsF) return;
+                if (dateF && m.parsedDate && formatDateToISO(m.parsedDate) !== dateF) return;
+
+                let isWon = evaluateTipCorrectness(m['Score Tip'], m['Match Result']);
+                if (isWon === null) return;
+
+                let mType = m['Match Type'] || 'General';
+                if (!typeFinancials[mType]) {
+                    typeFinancials[mType] = { staked: 0, returns: 0, won: 0, count: 0, matches: [] };
+                }
+
+                // Determine appropriate odds based on prediction
+                let tip = (m['Score Tip'] || '').trim();
+                let tipParts = tip.split(/[-:]/);
+                let odds = 2.0; // standard baseline odds default
+
+                if (tipParts.length === 2) {
+                    let h = parseInt(tipParts[0], 10);
+                    let a = parseInt(tipParts[1], 10);
+                    if (h > a && m['Home Odds']) odds = parseFloat(m['Home Odds']) || 2.0;
+                    else if (h < a && m['Away Odds']) odds = parseFloat(m['Away Odds']) || 2.0;
+                    else if (h === a && m['Draw Odds']) odds = parseFloat(m['Draw Odds']) || 2.0;
+                }
+
+                typeFinancials[mType].staked += unitStake;
+                typeFinancials[mType].count++;
+                totalStakedGlobal += unitStake;
+                evaluatedCountGlobal++;
+
+                let matchReturn = 0;
+                if (isWon) {
+                    typeFinancials[mType].won++;
+                    matchReturn = unitStake * odds;
+                    typeFinancials[mType].returns += matchReturn;
+                    totalReturnsGlobal += matchReturn;
+                }
+
+                typeFinancials[mType].matches.push({ ...m, odds, isWon, matchReturn });
+            });
+
+            let netProfitGlobal = totalReturnsGlobal - totalStakedGlobal;
+            let overallRoi = totalStakedGlobal > 0 ? ((netProfitGlobal / totalStakedGlobal) * 100).toFixed(1) : '0.0';
+
+            document.getElementById('roiTotalStaked').innerText = totalStakedGlobal.toLocaleString();
+            document.getElementById('roiTotalReturns').innerText = totalReturnsGlobal.toLocaleString(undefined, { maximumFractionDigits: 1 });
+            
+            const profitElem = document.getElementById('roiTotalProfit');
+            profitElem.innerText = (netProfitGlobal >= 0 ? '+' : '') + netProfitGlobal.toLocaleString(undefined, { maximumFractionDigits: 1 });
+            profitElem.className = `text-2xl font-black mt-0.5 ${netProfitGlobal >= 0 ? 'text-emerald-600' : 'text-red-600'}`;
+
+            document.getElementById('roiPercentage').innerText = (overallRoi >= 0 ? '+' : '') + overallRoi + '%';
+
+            // Render ROI breakdown cards
+            const container = document.getElementById('roiTablesContainer');
+            container.innerHTML = '';
+
+            const keys = Object.keys(typeFinancials);
+            if (keys.length === 0) {
+                container.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center text-slate-400 border border-slate-200">No evaluated matches found for ROI calculation.</div>`;
+                return;
+            }
+
+            keys.forEach(k => {
+                let tf = typeFinancials[k];
+                let profit = tf.returns - tf.staked;
+                let roi = tf.staked > 0 ? ((profit / tf.staked) * 100).toFixed(1) : '0.0';
+
+                let card = document.createElement('div');
+                card.className = "bg-white border border-slate-200/90 rounded-3xl p-6 shadow-sm space-y-4";
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+                        <div>
+                            <span class="px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200 rounded-xl text-xs font-black uppercase tracking-wider">${k}</span>
+                            <h4 class="text-base font-extrabold text-slate-900 mt-2">Financial Performance Metrics</h4>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+                            <span class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700">Staked: <strong class="text-slate-900">${tf.staked}</strong></span>
+                            <span class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700">Returns: <strong class="text-slate-900">${tf.returns.toFixed(1)}</strong></span>
+                            <span class="px-3 py-1.5 ${profit >= 0 ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-red-50 text-red-800 border-red-200'} border rounded-xl">Net Profit: <strong>${profit >= 0 ? '+' : ''}${profit.toFixed(1)}</strong></span>
+                            <span class="px-3 py-1.5 ${roi >= 0 ? 'bg-emerald-100 text-emerald-900' : 'bg-red-100 text-red-900'} rounded-xl font-black">ROI: ${roi >= 0 ? '+' : ''}${roi}%</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
         function renderBestTipsTab() {
             const container = document.getElementById('bestTipsContainer');
             if (!container) return;
             container.innerHTML = '';
 
-            // Aggregate overall Score Tip statistics across rawMatchData
             let tipStats = {};
 
             rawMatchData.forEach(row => {
@@ -1295,7 +1508,6 @@
                 }
             });
 
-            // Filter for Score Tips with Win Rate > 70%
             let qualifyingTips = [];
             Object.values(tipStats).forEach(st => {
                 if (st.evaluatedMatches > 0) {
@@ -1307,10 +1519,8 @@
                 }
             });
 
-            // Sort qualifying tips descending by win rate
             qualifyingTips.sort((a, b) => b.winRate - a.winRate);
 
-            // Update KPI cards
             document.getElementById('bestTipsQualifyingCount').innerText = qualifyingTips.length;
             
             let totalWinRateSum = qualifyingTips.reduce((acc, curr) => acc + curr.winRate, 0);
@@ -1333,7 +1543,6 @@
                 return;
             }
 
-            // Render each qualifying high-win-rate score tip card
             qualifyingTips.forEach(tipObj => {
                 let matchRowsHtml = '';
 
@@ -1408,11 +1617,153 @@
             });
         }
 
-        function renderRoiAnalytics() {
-            const container = document.getElementById('roiTablesContainer');
-            if (container) {
-                container.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center text-slate-500 border border-slate-200">ROI Analytics module is analyzing financial metrics...</div>`;
+        function openMatchModal(dataIndex) {
+            let row = filteredMatchData[dataIndex];
+            if (!row) return;
+
+            document.getElementById('modalMatchTitle').innerText = `${row['Home Team']} vs ${row['Away Team']}`;
+            document.getElementById('modalMatchSubtitle').innerText = `${row['Competition'] || 'Match'} • ${row['Match Date'] || ''}`;
+
+            let urlLink = document.getElementById('modalMatchUrlLink');
+            if (row['Match URL']) {
+                urlLink.href = row['Match URL'];
+                urlLink.classList.remove('hidden');
+            } else {
+                urlLink.classList.add('hidden');
             }
+
+            let isWon = evaluateTipCorrectness(row['Score Tip'], row['Match Result']);
+            let resultBadge = row['Match Result'] || 'Upcoming';
+            if (isWon === true) resultBadge += ' (Won ✅)';
+            else if (isWon === false) resultBadge += ' (Lost ❌)';
+
+            const content = document.getElementById('modalBodyContent');
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-teal-800 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-amber-500"></i> Form & Confidence
+                        </h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">Home Form:</span> <strong class="text-slate-900 font-bold">${row['Home Form'] || '-'}</strong></div>
+                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">Away Form:</span> <strong class="text-slate-900 font-bold">${row['Away Form'] || '-'}</strong></div>
+                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">Confidence Level:</span> <strong class="text-teal-700 font-mono font-bold">${row['Prediction Confidence'] || '-'}</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-500 font-medium">Goals Prediction:</span> <strong class="text-slate-900 font-mono font-bold">${row['Goals Prediction'] || '-'}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-teal-800 flex items-center gap-2">
+                            <i class="fa-solid fa-handshake-simple text-amber-500"></i> Head-to-Head & Standings
+                        </h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">H2H (Home/Draw/Away):</span> <strong class="text-slate-900 font-mono font-bold">${row['H2H Home Win'] || '0'} - ${row['H2H Draws'] || '0'} - ${row['H2H Away Win'] || '0'}</strong></div>
+                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">Team Power Rating:</span> <strong class="text-slate-900 font-mono font-bold">${row['Home Power'] || '-'} vs ${row['Away Power'] || '-'}</strong></div>
+                            <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-500 font-medium">League Position:</span> <strong class="text-slate-900 font-mono font-bold">#${row['Home Position'] || '-'} vs #${row['Away Position'] || '-'}</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-500 font-medium">Match Result:</span> <strong class="text-teal-700 font-mono font-extrabold">${resultBadge}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs md:col-span-2 space-y-3">
+                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-teal-800 flex items-center gap-2">
+                            <i class="fa-solid fa-futbol text-amber-500"></i> Scoring Averages
+                        </h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                                <span class="text-slate-400 block text-[10px] uppercase font-bold">Home Scored</span>
+                                <strong class="text-slate-900 font-mono text-sm">${row['Avg Home Scored'] || '-'}</strong>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                                <span class="text-slate-400 block text-[10px] uppercase font-bold">Away Scored</span>
+                                <strong class="text-slate-900 font-mono text-sm">${row['Avg Away Scored'] || '-'}</strong>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                                <span class="text-slate-400 block text-[10px] uppercase font-bold">Home Conceded</span>
+                                <strong class="text-slate-900 font-mono text-sm">${row['Avg Home Conceded'] || '-'}</strong>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                                <span class="text-slate-400 block text-[10px] uppercase font-bold">Away Conceded</span>
+                                <strong class="text-slate-900 font-mono text-sm">${row['Avg Away Conceded'] || '-'}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('matchDetailModal').classList.remove('hidden');
+        }
+
+        function closeMatchModal() {
+            document.getElementById('matchDetailModal').classList.add('hidden');
+        }
+
+        function openSourceModal() {
+            document.getElementById('customCsvUrl').value = CSV_URL;
+            document.getElementById('sourceModal').classList.remove('hidden');
+        }
+
+        function closeSourceModal() {
+            document.getElementById('sourceModal').classList.add('hidden');
+        }
+
+        function applyNewDataSource() {
+            const pastedText = document.getElementById('rawCsvPasteArea').value.trim();
+            const fileInput = document.getElementById('fileCsvInput');
+            const customUrl = document.getElementById('customCsvUrl').value.trim();
+
+            closeSourceModal();
+
+            if (pastedText) {
+                processRawCSVString(pastedText, "Pasted Raw CSV Text");
+            } else if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    processRawCSVString(e.target.result, fileInput.files[0].name);
+                };
+                reader.readAsText(fileInput.files[0]);
+            } else if (customUrl) {
+                CSV_URL = customUrl;
+                document.getElementById('currentSourceLabel').innerText = "Custom Google Sheet URL";
+                loadCSVData();
+            }
+        }
+
+        function processRawCSVString(csvText, sourceName) {
+            try {
+                const lines = parseCSVText(csvText);
+                if (lines.length < 2) throw new Error("CSV data must contain at least a header and one row.");
+
+                const rawHeaders = parseCSVRow(lines[0]);
+                const normalizedHeaders = rawHeaders.map(normalizeHeaderKey);
+
+                rawMatchData = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const values = parseCSVRow(lines[i]);
+                    let rowObj = {};
+                    normalizedHeaders.forEach((header, index) => {
+                        rowObj[header] = values[index] || '';
+                    });
+
+                    if (rowObj['Match Date']) {
+                        rowObj.parsedDate = parseCustomDate(rowObj['Match Date']);
+                    }
+                    rawMatchData.push(rowObj);
+                }
+
+                document.getElementById('currentSourceLabel').innerText = sourceName || "Custom Loaded Data";
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('errorState').classList.add('hidden');
+                document.getElementById('matchesTab').classList.remove('hidden');
+
+                populateFilterDropdowns();
+                applyFilters();
+            } catch (err) {
+                alert("CSV Parsing Error: " + err.message);
+            }
+        }
+
+        function useFallbackSampleData() {
+            processRawCSVString(SAMPLE_CSV_DATA, "Embedded Sample Dataset");
         }
 
         async function loadCSVData() {
@@ -1425,50 +1776,40 @@
             errorState.classList.add('hidden');
             matchesTab.classList.add('hidden');
 
+            let csvText = null;
+
+            // Attempt direct fetch first
             try {
                 const response = await fetch(CSV_URL);
-                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-                
-                const csvText = await response.text();
-                const rows = csvText.split('\n').filter(row => row.trim() !== '');
-                if (rows.length < 2) throw new Error("CSV file is empty or invalid.");
+                if (response.ok) {
+                    csvText = await response.text();
+                }
+            } catch (err) {
+                console.warn("Direct fetch failed, attempting proxy fallback...", err);
+            }
 
-                const headers = parseCSVRow(rows[0]);
-                rawMatchData = [];
-
-                for (let i = 1; i < rows.length; i++) {
-                    const values = parseCSVRow(rows[i]);
-                    let rowObj = {};
-                    headers.forEach((header, index) => {
-                        rowObj[header] = values[index] || '';
-                    });
-                    
-                    if (rowObj['Match Date']) {
-                        rowObj.parsedDate = parseCustomDate(rowObj['Match Date']);
+            // Attempt CORS proxy fallback if direct fetch fails
+            if (!csvText) {
+                try {
+                    const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(CSV_URL);
+                    const proxyRes = await fetch(proxyUrl);
+                    if (proxyRes.ok) {
+                        csvText = await proxyRes.text();
                     }
-                    
-                    rawMatchData.push(rowObj);
+                } catch (proxyErr) {
+                    console.warn("Proxy fallback failed.", proxyErr);
                 }
+            }
 
-                loadingState.classList.add('hidden');
-                
-                // Show matches tab if it is the active one
-                if (document.getElementById('btnTabMatches').classList.contains('bg-teal-700')) {
-                    matchesTab.classList.remove('hidden');
-                }
-
-                populateFilterDropdowns();
-                applyFilters();
-
-            } catch (error) {
-                console.error("Fetch error:", error);
+            if (csvText) {
+                processRawCSVString(csvText, "Google Sheet Published Feed");
+            } else {
                 loadingState.classList.add('hidden');
                 errorState.classList.remove('hidden');
-                errorMessage.innerText = error.message;
+                errorMessage.innerText = "Network CORS or Endpoint Restriction: Unable to connect directly to the published URL.";
             }
         }
 
-        // Initialize connection on load
         window.onload = loadCSVData;
     </script>
 </body>
